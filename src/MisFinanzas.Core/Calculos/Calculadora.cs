@@ -52,7 +52,7 @@ public static class Calculadora
     public static ResumenGeneral CalcularGeneral(IEnumerable<ResumenMes> meses) =>
         new() { Meses = meses.OrderBy(m => m.Periodo).ToList() };
 
-    /// <summary>"🎨 ¿En qué se fue?": gasto por categoría vs presupuesto.</summary>
+    /// <summary>" ¿En qué se fue?": gasto por categoría vs presupuesto.</summary>
     private static List<ResumenCategoria> CalcularPorCategoria(
         List<Movimiento> vigentes, IEnumerable<Categoria> categorias, Ajustes ajustes)
     {

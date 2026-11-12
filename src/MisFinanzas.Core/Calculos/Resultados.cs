@@ -6,9 +6,9 @@ public enum AlertaPresupuesto
 {
     SinPresupuesto,
     Ok,
-    /// <summary>"👀 Al límite" en el Excel.</summary>
+    /// <summary>"Al límite" en el Excel.</summary>
     AlLimite,
-    /// <summary>"😬 Me pasé" en el Excel.</summary>
+    /// <summary>"Me pasé" en el Excel.</summary>
     MePase,
 }
 
@@ -44,13 +44,13 @@ public record ResumenMes
     public decimal Compras { get; init; }
     public decimal TotalGastos => CuentasFijas + Deudas + Compras;
 
-    /// <summary>"✨ Me queda".</summary>
+    /// <summary>"Me queda".</summary>
     public decimal MeQueda => Ingresos - TotalGastos;
 
-    /// <summary>"⏳ Por pagar aún": cuentas fijas y deudas que no están pagadas.</summary>
+    /// <summary>"Por pagar aún": cuentas fijas y deudas que no están pagadas.</summary>
     public decimal PorPagar { get; init; }
 
-    /// <summary>"📊 Gastado del ingreso" (0,85 = 85 %). 0 si no hay ingresos.</summary>
+    /// <summary>"Gastado del ingreso" (0,85 = 85 %). 0 si no hay ingresos.</summary>
     public decimal PorcentajeGastado => Ingresos == 0 ? 0 : TotalGastos / Ingresos;
 
     /// <summary>True si el gasto supera el umbral configurado del ingreso.</summary>
@@ -66,10 +66,10 @@ public record ResumenGeneral
     public IReadOnlyList<ResumenMes> Meses { get; init; } = [];
     public decimal TotalIngresos => Meses.Sum(m => m.Ingresos);
     public decimal TotalGastos => Meses.Sum(m => m.TotalGastos);
-    /// <summary>"🐷 Ahorrado": suma de lo que quedó cada mes.</summary>
+    /// <summary>"Ahorrado": suma de lo que quedó cada mes.</summary>
     public decimal TotalAhorrado => Meses.Sum(m => m.MeQueda);
-    /// <summary>"📆 Gasto promedio".</summary>
+    /// <summary>"Gasto promedio".</summary>
     public decimal GastoPromedio => Meses.Count == 0 ? 0 : TotalGastos / Meses.Count;
-    /// <summary>"🔥 Mes más caro". null si no hay meses.</summary>
+    /// <summary>"Mes más caro". null si no hay meses.</summary>
     public ResumenMes? MesMasCaro => Meses.Count == 0 ? null : Meses.MaxBy(m => m.TotalGastos);
 }
