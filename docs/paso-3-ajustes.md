@@ -21,7 +21,7 @@ Equivalen a la tabla *Gastos permanentes* del Excel.
   - **Editar.** Por defecto también actualiza la cuenta de este mes si sigue pendiente; puedes desactivarlo con el interruptor. Los meses pasados nunca cambian.
   - **Dejar de pagarlo desde el próximo mes.** Queda hasta el mes actual y desaparece de los meses siguientes (si estaban pendientes).
   - **Volver a activarlo** si estaba terminado.
-  - **Eliminar.** Solo es posible si nunca apareció en un mes; si ya tiene historial, la app te sugiere "Dejar de pagarlo".
+  - **Eliminar.** Lo borra **en cascada**: desaparece de la lista y de **todos** los meses donde apareció, aunque estuviera pagado, y esos totales se recalculan. Antes de borrar, la app te dice cuántos meses se verán afectados. No se puede deshacer; si solo quieres que no siga apareciendo, usa "Dejar de pagarlo".
 - Arriba se muestra el total de gastos fijos activos al mes.
 
 ### 🏷️ Categorías
@@ -32,6 +32,12 @@ Equivalen a la tabla *Gastos permanentes* del Excel.
   - **Quitar.** Si nunca se usó, se borra. Si tiene historial, pasa a **Archivadas**: no aparece para gastos nuevos, pero los meses pasados quedan intactos.
 - Las archivadas se pueden **restaurar**.
 - No se permiten dos categorías con el mismo nombre.
+
+### 🌙 Apariencia
+
+Elige **Automático** (sigue el modo del teléfono), **Claro** u **Oscuro**. La app recuerda la elección.
+
+El modo oscuro usa una paleta suave: fondo violeta profundo (`#22202D`, no negro), tarjetas un tono más claras, texto blanco lavanda (no blanco puro) y versiones apagadas del lila, rosa, menta, coral y ámbar. Todos los textos superan un contraste de 5:1. Cada color de `Colors.xaml` tiene su par `…Oscuro`, y las vistas usan `AppThemeBinding` para elegir el que corresponde.
 
 ### 🔔 Alertas
 

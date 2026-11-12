@@ -15,7 +15,7 @@
             <Setter Property="StrokeThickness" Value="0" />
             <Setter Property="StrokeShape" Value="RoundRectangle 999" />
             <Setter Property="Padding" Value="16,8" />
-            <Setter Property="BackgroundColor" Value="{StaticResource Superficie}" />
+            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Superficie}, Dark={StaticResource SuperficieOscuro}}" />
         </Style>
 
         <!-- Fila de "Mes a mes": nombre, lo que quedó y dos barras -->
@@ -23,18 +23,18 @@
             <VerticalStackLayout Spacing="5" Padding="0,8">
                 <Grid ColumnDefinitions="*,Auto">
                     <Label Text="{Binding Titulo}" Style="{StaticResource TextoFuerte}" />
-                    <Label Grid.Column="1" Text="{Binding MeQuedoTexto}" Style="{StaticResource Monto}" TextColor="{StaticResource Menta}">
+                    <Label Grid.Column="1" Text="{Binding MeQuedoTexto}" Style="{StaticResource Monto}" TextColor="{AppThemeBinding Light={StaticResource Menta}, Dark={StaticResource MentaOscuro}}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding MeQuedoNegativo}" Value="True">
-                                <Setter Property="TextColor" Value="{StaticResource Coral}" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Coral}, Dark={StaticResource CoralOscuro}}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
                 </Grid>
                 <BoxView HeightRequest="10" CornerRadius="5" HorizontalOptions="Start"
-                         Color="{StaticResource LilaClaro}" WidthRequest="{Binding AnchoIngresos}" />
+                         Color="{AppThemeBinding Light={StaticResource LilaClaro}, Dark={StaticResource LilaClaroOscuro}}" WidthRequest="{Binding AnchoIngresos}" />
                 <BoxView HeightRequest="10" CornerRadius="5" HorizontalOptions="Start"
-                         Color="{StaticResource RosaClaro}" WidthRequest="{Binding AnchoGastos}" />
+                         Color="{AppThemeBinding Light={StaticResource RosaClaro}, Dark={StaticResource RosaClaroOscuro}}" WidthRequest="{Binding AnchoGastos}" />
                 <Label Style="{StaticResource TextoSuave}" FontSize="12">
                     <Label.FormattedText>
                         <FormattedString>
@@ -58,7 +58,7 @@
                     <Label Grid.Column="2" Text="{Binding TotalTexto}" Style="{StaticResource Monto}" VerticalOptions="Center" />
                 </Grid>
                 <BoxView HeightRequest="8" CornerRadius="4" HorizontalOptions="Start"
-                         Color="{StaticResource LilaClaro}" WidthRequest="{Binding Ancho}" />
+                         Color="{AppThemeBinding Light={StaticResource LilaClaro}, Dark={StaticResource LilaClaroOscuro}}" WidthRequest="{Binding Ancho}" />
                 <Label Text="{Binding PorcentajeTexto}" Style="{StaticResource TextoSuave}" FontSize="12" />
             </VerticalStackLayout>
         </DataTemplate>
@@ -85,13 +85,13 @@
                     </Border.GestureRecognizers>
                     <Border.Triggers>
                         <DataTrigger TargetType="Border" Binding="{Binding EsSeisMeses}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
                         </DataTrigger>
                     </Border.Triggers>
-                    <Label Text="6 meses" FontFamily="RedondaMedia" FontSize="13" TextColor="{StaticResource Lila}">
+                    <Label Text="6 meses" FontFamily="RedondaMedia" FontSize="13" TextColor="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding EsSeisMeses}" Value="True">
-                                <Setter Property="TextColor" Value="{StaticResource White}" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SobreLila}, Dark={StaticResource SobreLilaOscuro}}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
@@ -102,13 +102,13 @@
                     </Border.GestureRecognizers>
                     <Border.Triggers>
                         <DataTrigger TargetType="Border" Binding="{Binding EsDoceMeses}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
                         </DataTrigger>
                     </Border.Triggers>
-                    <Label Text="12 meses" FontFamily="RedondaMedia" FontSize="13" TextColor="{StaticResource Lila}">
+                    <Label Text="12 meses" FontFamily="RedondaMedia" FontSize="13" TextColor="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding EsDoceMeses}" Value="True">
-                                <Setter Property="TextColor" Value="{StaticResource White}" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SobreLila}, Dark={StaticResource SobreLilaOscuro}}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
@@ -119,13 +119,13 @@
                     </Border.GestureRecognizers>
                     <Border.Triggers>
                         <DataTrigger TargetType="Border" Binding="{Binding EsTodo}" Value="True">
-                            <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+                            <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
                         </DataTrigger>
                     </Border.Triggers>
-                    <Label Text="Todo" FontFamily="RedondaMedia" FontSize="13" TextColor="{StaticResource Lila}">
+                    <Label Text="Todo" FontFamily="RedondaMedia" FontSize="13" TextColor="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}">
                         <Label.Triggers>
                             <DataTrigger TargetType="Label" Binding="{Binding EsTodo}" Value="True">
-                                <Setter Property="TextColor" Value="{StaticResource White}" />
+                                <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SobreLila}, Dark={StaticResource SobreLilaOscuro}}" />
                             </DataTrigger>
                         </Label.Triggers>
                     </Label>
@@ -146,8 +146,8 @@
             <Border Style="{StaticResource Tarjeta}" Stroke="Transparent" Padding="22" IsVisible="{Binding HayDatos}">
                 <Border.Background>
                     <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                        <GradientStop Color="{StaticResource HeroInicio}" Offset="0" />
-                        <GradientStop Color="{StaticResource HeroFin}" Offset="1" />
+                        <GradientStop Color="{AppThemeBinding Light={StaticResource HeroInicio}, Dark={StaticResource HeroInicioOscuro}}" Offset="0" />
+                        <GradientStop Color="{AppThemeBinding Light={StaticResource HeroFin}, Dark={StaticResource HeroFinOscuro}}" Offset="1" />
                     </LinearGradientBrush>
                 </Border.Background>
 
@@ -160,7 +160,7 @@
                         <Label Text="{Binding AhorradoTexto}" Style="{StaticResource MontoGrande}">
                             <Label.Triggers>
                                 <DataTrigger TargetType="Label" Binding="{Binding AhorradoNegativo}" Value="True">
-                                    <Setter Property="TextColor" Value="{StaticResource Coral}" />
+                                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Coral}, Dark={StaticResource CoralOscuro}}" />
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
@@ -196,11 +196,11 @@
                     <Label Text="🗓️ Mes a mes" Style="{StaticResource TituloSeccion}" />
                     <HorizontalStackLayout Spacing="14">
                         <HorizontalStackLayout Spacing="6">
-                            <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="{StaticResource LilaClaro}" VerticalOptions="Center" />
+                            <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="{AppThemeBinding Light={StaticResource LilaClaro}, Dark={StaticResource LilaClaroOscuro}}" VerticalOptions="Center" />
                             <Label Text="Ingresos" Style="{StaticResource TextoSuave}" FontSize="12" />
                         </HorizontalStackLayout>
                         <HorizontalStackLayout Spacing="6">
-                            <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="{StaticResource RosaClaro}" VerticalOptions="Center" />
+                            <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="{AppThemeBinding Light={StaticResource RosaClaro}, Dark={StaticResource RosaClaroOscuro}}" VerticalOptions="Center" />
                             <Label Text="Gastos" Style="{StaticResource TextoSuave}" FontSize="12" />
                         </HorizontalStackLayout>
                         <Label Text="· a la derecha, lo que quedó" Style="{StaticResource TextoSuave}" FontSize="12" />

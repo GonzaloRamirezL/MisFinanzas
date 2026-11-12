@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Colores de Android en modo oscuro: tonos suaves de la paleta oscura (ver Resources/Styles/Colors.xaml). -->
+<resources>
+    <color name="colorPrimary">#C9B8F5</color>
+    <color name="colorPrimaryDark">#2C2939</color>
+    <color name="colorAccent">#C9B8F5</color>
+</resources>

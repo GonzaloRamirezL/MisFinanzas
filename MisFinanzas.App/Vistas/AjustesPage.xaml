@@ -16,14 +16,14 @@
                 <Grid.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding TocarCommand}" />
                 </Grid.GestureRecognizers>
-                <Border Style="{StaticResource Burbuja}" BackgroundColor="{StaticResource LilaSuave}">
+                <Border Style="{StaticResource Burbuja}" BackgroundColor="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}">
                     <Label Text="{Binding Emoji}" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
                 <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
                     <Label Text="{Binding Nombre}" Style="{StaticResource TextoFuerte}" />
                     <Label Text="{Binding Detalle}" Style="{StaticResource TextoSuave}" />
                 </VerticalStackLayout>
-                <Label Grid.Column="2" Text="›" FontSize="22" TextColor="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                <Label Grid.Column="2" Text="›" FontSize="22" TextColor="{AppThemeBinding Light={StaticResource ColorTextoSuave}, Dark={StaticResource ColorTextoSuaveOscuro}}" VerticalOptions="Center" />
             </Grid>
         </DataTemplate>
 
@@ -47,16 +47,16 @@
                 </VerticalStackLayout>
                 <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="4">
                     <Label Text="{Binding MontoTexto}" Style="{StaticResource Monto}" />
-                    <Border Style="{StaticResource Pildora}" BackgroundColor="{StaticResource MentaSuave}">
+                    <Border Style="{StaticResource Pildora}" BackgroundColor="{AppThemeBinding Light={StaticResource MentaSuave}, Dark={StaticResource MentaSuaveOscuro}}">
                         <Border.Triggers>
                             <DataTrigger TargetType="Border" Binding="{Binding EstaActivo}" Value="False">
-                                <Setter Property="BackgroundColor" Value="{StaticResource LilaSuave}" />
+                                <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}" />
                             </DataTrigger>
                         </Border.Triggers>
-                        <Label Text="{Binding EstadoTexto}" FontSize="11" FontFamily="RedondaMedia" TextColor="{StaticResource Menta}">
+                        <Label Text="{Binding EstadoTexto}" FontSize="11" FontFamily="RedondaMedia" TextColor="{AppThemeBinding Light={StaticResource Menta}, Dark={StaticResource MentaOscuro}}">
                             <Label.Triggers>
                                 <DataTrigger TargetType="Label" Binding="{Binding EstaActivo}" Value="False">
-                                    <Setter Property="TextColor" Value="{StaticResource Lila}" />
+                                    <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
                                 </DataTrigger>
                             </Label.Triggers>
                         </Label>
@@ -108,12 +108,27 @@
                                          BindableLayout.ItemTemplate="{StaticResource PlantillaCategoria}" />
 
                     <VerticalStackLayout Spacing="2" IsVisible="{Binding HayArchivadas}" Opacity="0.6">
-                        <BoxView HeightRequest="1" Color="{StaticResource Linea}" Margin="0,8" />
+                        <BoxView HeightRequest="1" Color="{AppThemeBinding Light={StaticResource Linea}, Dark={StaticResource LineaOscuro}}" Margin="0,8" />
                         <Label Text="📦 Archivadas" Style="{StaticResource TextoSuave}" FontFamily="RedondaMedia" />
                         <VerticalStackLayout BindableLayout.ItemsSource="{Binding CategoriasArchivadas}"
                                              BindableLayout.ItemTemplate="{StaticResource PlantillaCategoria}" />
                     </VerticalStackLayout>
                 </VerticalStackLayout>
+            </Border>
+
+            <!-- Apariencia -->
+            <Border Style="{StaticResource Tarjeta}">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CambiarTemaCommand}" />
+                    </Grid.GestureRecognizers>
+                    <VerticalStackLayout Spacing="1">
+                        <Label Text="🌙 Apariencia" Style="{StaticResource TituloSeccion}" />
+                        <Label Text="{Binding TemaTexto}" Style="{StaticResource TextoSuave}" />
+                    </VerticalStackLayout>
+                    <Label Grid.Column="1" Text="›" FontSize="22" VerticalOptions="Center"
+                           TextColor="{AppThemeBinding Light={StaticResource ColorTextoSuave}, Dark={StaticResource ColorTextoSuaveOscuro}}" />
+                </Grid>
             </Border>
 
             <!-- Alertas -->
@@ -129,7 +144,7 @@
                             <Label Text="Cuenta fija que sube" Style="{StaticResource TextoFuerte}" />
                             <Label Text="Comparada con el mes anterior" Style="{StaticResource TextoSuave}" />
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="{Binding UmbralSubidaTexto}" Style="{StaticResource Monto}" TextColor="{StaticResource Lila}" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="{Binding UmbralSubidaTexto}" Style="{StaticResource Monto}" TextColor="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" VerticalOptions="Center" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Padding="2,8">
@@ -140,7 +155,7 @@
                             <Label Text="Gasto del mes" Style="{StaticResource TextoFuerte}" />
                             <Label Text="Porcentaje de lo que ingresa" Style="{StaticResource TextoSuave}" />
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="{Binding UmbralGastoTexto}" Style="{StaticResource Monto}" TextColor="{StaticResource Lila}" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="{Binding UmbralGastoTexto}" Style="{StaticResource Monto}" TextColor="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" VerticalOptions="Center" />
                     </Grid>
 
                     <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12" Padding="2,8">
@@ -151,7 +166,7 @@
                             <Label Text="Presupuesto al límite" Style="{StaticResource TextoFuerte}" />
                             <Label Text="Porcentaje usado de una categoría" Style="{StaticResource TextoSuave}" />
                         </VerticalStackLayout>
-                        <Label Grid.Column="1" Text="{Binding UmbralLimiteTexto}" Style="{StaticResource Monto}" TextColor="{StaticResource Lila}" VerticalOptions="Center" />
+                        <Label Grid.Column="1" Text="{Binding UmbralLimiteTexto}" Style="{StaticResource Monto}" TextColor="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" VerticalOptions="Center" />
                     </Grid>
 
                     <Label Text="Toca un valor para cambiarlo." Style="{StaticResource TextoSuave}" Margin="2,4,0,0" />

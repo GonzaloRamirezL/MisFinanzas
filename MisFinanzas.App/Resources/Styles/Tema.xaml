@@ -7,8 +7,8 @@
 
     <!-- Tarjetas -->
     <Style x:Key="Tarjeta" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource Superficie}" />
-        <Setter Property="Stroke" Value="{StaticResource Linea}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Superficie}, Dark={StaticResource SuperficieOscuro}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Linea}, Dark={StaticResource LineaOscuro}}" />
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="StrokeShape" Value="RoundRectangle 24" />
         <Setter Property="Padding" Value="18" />
@@ -18,15 +18,15 @@
     </Style>
 
     <Style x:Key="TarjetaAlerta" TargetType="Border" BasedOn="{StaticResource Tarjeta}">
-        <Setter Property="BackgroundColor" Value="{StaticResource CoralSuave}" />
-        <Setter Property="Stroke" Value="{StaticResource CoralSuave}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource CoralSuave}, Dark={StaticResource CoralSuaveOscuro}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource CoralSuave}, Dark={StaticResource CoralSuaveOscuro}}" />
         <Setter Property="Shadow" Value="{x:Null}" />
         <Setter Property="Padding" Value="16,14" />
     </Style>
 
     <!-- Círculo con emoji a la izquierda de cada fila -->
     <Style x:Key="Burbuja" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource RosaSuave}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource RosaSuave}, Dark={StaticResource RosaSuaveOscuro}}" />
         <Setter Property="StrokeThickness" Value="0" />
         <Setter Property="StrokeShape" Value="RoundRectangle 20" />
         <Setter Property="WidthRequest" Value="40" />
@@ -46,51 +46,51 @@
     <Style x:Key="TituloPagina" TargetType="Label">
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="24" />
-        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTexto}, Dark={StaticResource ColorTextoOscuro}}" />
     </Style>
 
     <Style x:Key="TituloSeccion" TargetType="Label">
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="17" />
-        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTexto}, Dark={StaticResource ColorTextoOscuro}}" />
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
     <Style x:Key="TextoFuerte" TargetType="Label">
         <Setter Property="FontFamily" Value="RedondaMedia" />
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTexto}, Dark={StaticResource ColorTextoOscuro}}" />
     </Style>
 
     <Style x:Key="TextoSuave" TargetType="Label">
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="TextColor" Value="{StaticResource TextoSuave}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTextoSuave}, Dark={StaticResource ColorTextoSuaveOscuro}}" />
     </Style>
 
     <Style x:Key="Monto" TargetType="Label">
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTexto}, Dark={StaticResource ColorTextoOscuro}}" />
         <Setter Property="HorizontalTextAlignment" Value="End" />
     </Style>
 
     <Style x:Key="MontoGrande" TargetType="Label">
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="38" />
-        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTexto}, Dark={StaticResource ColorTextoOscuro}}" />
     </Style>
 
     <Style x:Key="EtiquetaCampo" TargetType="Label">
         <Setter Property="FontFamily" Value="RedondaMedia" />
         <Setter Property="FontSize" Value="13" />
-        <Setter Property="TextColor" Value="{StaticResource TextoSuave}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTextoSuave}, Dark={StaticResource ColorTextoSuaveOscuro}}" />
         <Setter Property="Margin" Value="4,0,0,0" />
     </Style>
 
     <!-- Botones -->
     <Style x:Key="BotonPrincipal" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
-        <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource SobreLila}, Dark={StaticResource SobreLilaOscuro}}" />
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="16" />
         <Setter Property="CornerRadius" Value="22" />
@@ -98,8 +98,8 @@
     </Style>
 
     <Style x:Key="BotonSuave" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{StaticResource LilaSuave}" />
-        <Setter Property="TextColor" Value="{StaticResource Lila}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="15" />
         <Setter Property="CornerRadius" Value="22" />
@@ -108,15 +108,15 @@
 
     <Style x:Key="BotonTexto" TargetType="Button">
         <Setter Property="BackgroundColor" Value="Transparent" />
-        <Setter Property="TextColor" Value="{StaticResource TextoSuave}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource ColorTextoSuave}, Dark={StaticResource ColorTextoSuaveOscuro}}" />
         <Setter Property="FontFamily" Value="RedondaMedia" />
         <Setter Property="FontSize" Value="15" />
     </Style>
 
     <!-- Botón redondo "+" de cada sección y flechas de mes -->
     <Style x:Key="BotonCirculo" TargetType="Button">
-        <Setter Property="BackgroundColor" Value="{StaticResource LilaSuave}" />
-        <Setter Property="TextColor" Value="{StaticResource Lila}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
         <Setter Property="FontFamily" Value="RedondaNegrita" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="WidthRequest" Value="40" />
@@ -130,8 +130,8 @@
 
     <!-- Campos de formulario -->
     <Style x:Key="CajaCampo" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource Fondo}" />
-        <Setter Property="Stroke" Value="{StaticResource Linea}" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource Fondo}, Dark={StaticResource FondoOscuro}}" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Light={StaticResource Linea}, Dark={StaticResource LineaOscuro}}" />
         <Setter Property="StrokeThickness" Value="1" />
         <Setter Property="StrokeShape" Value="RoundRectangle 16" />
         <Setter Property="Padding" Value="12,2" />

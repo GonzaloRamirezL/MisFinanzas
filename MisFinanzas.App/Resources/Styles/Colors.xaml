@@ -4,16 +4,20 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
 
     <!--
-        Paleta "lila pastel". Todos los textos cumplen contraste mínimo 4,4:1 sobre su fondo.
+        Paleta "lila pastel" con modo claro y modo oscuro.
+        Cada color tiene su versión "…Oscuro"; las vistas usan AppThemeBinding para elegir la que corresponde.
+        Todos los textos cumplen un contraste ≥ 4,5:1 sobre su fondo en ambos modos.
         Si cambias un color, revisa también Platforms/Android/Resources/values/colors.xml.
     -->
+
+    <!-- ───────── Modo claro ───────── -->
 
     <!-- Base -->
     <Color x:Key="Fondo">#FAF7FF</Color>
     <Color x:Key="Superficie">#FFFFFF</Color>
     <Color x:Key="Linea">#ECE4F7</Color>
-    <Color x:Key="Texto">#352F4A</Color>
-    <Color x:Key="TextoSuave">#6B6382</Color>
+    <Color x:Key="ColorTexto">#352F4A</Color>
+    <Color x:Key="ColorTextoSuave">#6B6382</Color>
 
     <!-- Acentos: lila (principal) y rosa (secundario) -->
     <Color x:Key="Lila">#7650C4</Color>
@@ -22,6 +26,8 @@
     <Color x:Key="Rosa">#A8406F</Color>
     <Color x:Key="RosaClaro">#F5B4CF</Color>
     <Color x:Key="RosaSuave">#FCEAF2</Color>
+    <!-- Texto sobre un fondo lila (botón principal, opción elegida) -->
+    <Color x:Key="SobreLila">#FFFFFF</Color>
 
     <!-- Estados -->
     <Color x:Key="Menta">#237A5D</Color>
@@ -38,19 +44,48 @@
     <Color x:Key="HeroInicio">#E7DDFF</Color>
     <Color x:Key="HeroFin">#FBE3F0</Color>
 
-    <!-- Nombres que usa la plantilla de MAUI (Styles.xaml). Apuntan a la paleta de arriba. -->
+    <!-- ───────── Modo oscuro: violeta profundo y tonos apagados, nunca negro ni colores saturados ───────── -->
+
+    <Color x:Key="FondoOscuro">#22202D</Color>
+    <Color x:Key="SuperficieOscuro">#2C2939</Color>
+    <Color x:Key="LineaOscuro">#3B3649</Color>
+    <Color x:Key="ColorTextoOscuro">#ECE6F4</Color>
+    <Color x:Key="ColorTextoSuaveOscuro">#B1A8C4</Color>
+
+    <Color x:Key="LilaOscuro">#C9B8F5</Color>
+    <Color x:Key="LilaClaroOscuro">#8E78D0</Color>
+    <Color x:Key="LilaSuaveOscuro">#3A3253</Color>
+    <Color x:Key="RosaOscuro">#F2B3CD</Color>
+    <Color x:Key="RosaClaroOscuro">#C97FA3</Color>
+    <Color x:Key="RosaSuaveOscuro">#45303F</Color>
+    <Color x:Key="SobreLilaOscuro">#22202D</Color>
+
+    <Color x:Key="MentaOscuro">#93DDC4</Color>
+    <Color x:Key="MentaClaroOscuro">#5DB895</Color>
+    <Color x:Key="MentaSuaveOscuro">#283F38</Color>
+    <Color x:Key="CoralOscuro">#FFAAB7</Color>
+    <Color x:Key="CoralClaroOscuro">#D9798A</Color>
+    <Color x:Key="CoralSuaveOscuro">#4A2D35</Color>
+    <Color x:Key="AmbarOscuro">#F2CF8C</Color>
+    <Color x:Key="AmbarClaroOscuro">#CFA052</Color>
+    <Color x:Key="AmbarSuaveOscuro">#433826</Color>
+
+    <Color x:Key="HeroInicioOscuro">#3B3357</Color>
+    <Color x:Key="HeroFinOscuro">#4A3149</Color>
+
+    <!-- ───────── Nombres que usa la plantilla de MAUI (Styles.xaml) ───────── -->
     <Color x:Key="Primary">#7650C4</Color>
-    <Color x:Key="PrimaryDark">#C4B1F2</Color>
-    <Color x:Key="PrimaryDarkText">#352F4A</Color>
+    <Color x:Key="PrimaryDark">#C9B8F5</Color>
+    <Color x:Key="PrimaryDarkText">#22202D</Color>
     <Color x:Key="Secondary">#EFE8FD</Color>
-    <Color x:Key="SecondaryDarkText">#C4B1F2</Color>
+    <Color x:Key="SecondaryDarkText">#C9B8F5</Color>
     <Color x:Key="Tertiary">#A8406F</Color>
 
     <Color x:Key="White">White</Color>
     <Color x:Key="Black">#352F4A</Color>
     <Color x:Key="Magenta">#7650C4</Color>
     <Color x:Key="MidnightBlue">#352F4A</Color>
-    <Color x:Key="OffBlack">#1f1f1f</Color>
+    <Color x:Key="OffBlack">#22202D</Color>
 
     <Color x:Key="Gray100">#ECE4F7</Color>
     <Color x:Key="Gray200">#DDD3EC</Color>

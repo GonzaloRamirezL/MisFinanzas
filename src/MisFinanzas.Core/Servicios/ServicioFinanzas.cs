@@ -241,13 +241,23 @@ public class ServicioFinanzas(IFinanzasRepositorio repo, Func<DateTime>? reloj =
                 await repo.EliminarMovimientoAsync(mov.Id);
     }
 
-    /// <summary>Borra un gasto permanente por completo. Solo si nunca se generó en ningún mes; si no, usa Terminar.</summary>
-    public async Task<bool> EliminarGastoFijoAsync(GastoFijo gasto)
+    /// <summary>Cuántos meses tienen una cuenta generada por este gasto permanente (para avisar antes de borrar).</summary>
+    public async Task<int> ContarMesesDeGastoFijoAsync(GastoFijo gasto) =>
+        (await repo.ObtenerMovimientosDeGastoFijoAsync(gasto.Id)).Select(m => m.MesClave).Distinct().Count();
+
+    /// <summary>
+    /// Borra un gasto permanente en cascada: el gasto y todas las cuentas que generó en
+    /// cualquier mes (pagadas, pendientes u omitidas). Los totales de esos meses se recalculan solos.
+    /// Si solo quieres que deje de aparecer desde ahora, usa <see cref="TerminarGastoFijoAsync"/>.
+    /// Devuelve cuántas cuentas se borraron de los meses.
+    /// </summary>
+    public async Task<int> EliminarGastoFijoAsync(GastoFijo gasto)
     {
-        if ((await repo.ObtenerMovimientosDeGastoFijoAsync(gasto.Id)).Count > 0)
-            return false;
+        var movimientos = await repo.ObtenerMovimientosDeGastoFijoAsync(gasto.Id);
+        foreach (var mov in movimientos)
+            await repo.EliminarMovimientoAsync(mov.Id);
         await repo.EliminarGastoFijoAsync(gasto.Id);
-        return true;
+        return movimientos.Count;
     }
 
     // ───────────── Ajustes ─────────────

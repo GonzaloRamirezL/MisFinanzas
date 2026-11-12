@@ -1,12 +1,14 @@
-﻿namespace MisFinanzas.App;
+using MisFinanzas.App.Servicios;
+
+namespace MisFinanzas.App;
 
 public partial class App : Application
 {
-    public App()
+    public App(PreferenciaTemaMaui tema)
     {
         InitializeComponent();
-        // La paleta pastel está pensada para modo claro; así se ve igual aunque el teléfono esté en modo oscuro.
-        UserAppTheme = AppTheme.Light;
+        // Claro, oscuro o el del teléfono, según lo elegido en Ajustes → Apariencia.
+        tema.AplicarGuardado();
     }
 
     protected override Window CreateWindow(IActivationState? activationState) =>

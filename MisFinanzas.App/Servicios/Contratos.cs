@@ -21,6 +21,22 @@ public interface INavegacion
     Task<bool> AbrirFormularioAsync(FormularioBase formulario);
 }
 
+/// <summary>Apariencia de la app.</summary>
+public enum TemaApp
+{
+    /// <summary>Sigue el modo claro u oscuro del teléfono.</summary>
+    Sistema,
+    Claro,
+    Oscuro,
+}
+
+public interface IPreferenciaTema
+{
+    TemaApp Actual { get; }
+    /// <summary>Aplica el tema al instante y lo recuerda para la próxima vez.</summary>
+    void Cambiar(TemaApp tema);
+}
+
 public interface ICompartir
 {
     /// <summary>Guarda el texto como archivo y abre el menú "Compartir" del teléfono (Drive, correo, etc.).</summary>

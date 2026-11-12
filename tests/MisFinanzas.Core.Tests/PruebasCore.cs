@@ -171,7 +171,6 @@ public class PruebasServicio
         Assert.Single(await s.ObtenerMovimientosAsync(new(2026, 11)));
         Assert.Empty(await s.ObtenerMovimientosAsync(new(2026, 12)));
         Assert.Empty(await s.ObtenerMovimientosAsync(new(2027, 1)));
-        Assert.False(await s.EliminarGastoFijoAsync(hbo)); // tiene historial: no se borra
     }
 
     [Fact]
@@ -359,5 +358,38 @@ public class PruebasResumen
         Assert.Equal("Hogar", cats[0].Nombre);          // ordenado de mayor a menor
         Assert.Equal(350, cats[0].Gastado);
         Assert.Equal(220, cats[1].Gastado);
+    }
+}
+
+public class PruebasBorradoEnCascada
+{
+    [Fact]
+    public async Task Eliminar_gasto_fijo_lo_borra_de_todos_los_meses()
+    {
+        var repo = new RepositorioEnMemoria();
+        await repo.InicializarAsync();
+        var s = new ServicioFinanzas(repo, () => new DateTime(2026, 12, 5));
+        var luz = new GastoFijo { Concepto = "Luz", CategoriaId = 1, MontoHabitual = 80_000, DesdeClave = 202610 };
+        var agua = new GastoFijo { Concepto = "Agua", CategoriaId = 1, MontoHabitual = 30_000, DesdeClave = 202610 };
+        await s.GuardarGastoFijoAsync(luz);
+        await s.GuardarGastoFijoAsync(agua);
+        foreach (var p in new Periodo[] { new(2026, 10), new(2026, 11), new(2026, 12) })
+            await s.AbrirMesAsync(p);
+
+        // Un mes pagado y otro quitado solo de ese mes: igual se borran.
+        await s.CambiarEstadoAsync((await s.ObtenerMovimientosAsync(new(2026, 10))).Single(m => m.Concepto == "Luz"), EstadoPago.Pagado);
+        await s.QuitarMovimientoAsync((await s.ObtenerMovimientosAsync(new(2026, 11))).Single(m => m.Concepto == "Luz"));
+
+        Assert.Equal(3, await s.ContarMesesDeGastoFijoAsync(luz));
+        Assert.Equal(3, await s.EliminarGastoFijoAsync(luz));
+
+        Assert.DoesNotContain(repo.Movimientos, m => m.GastoFijoId == luz.Id);
+        Assert.DoesNotContain(repo.GastosFijos, g => g.Id == luz.Id);
+        Assert.Equal(3, repo.Movimientos.Count(m => m.GastoFijoId == agua.Id));   // el otro gasto no se toca
+
+        // Reabrir un mes no lo vuelve a crear y el total del mes ya no lo incluye.
+        await s.AbrirMesAsync(new(2026, 10));
+        var resumen = await s.ObtenerResumenMesAsync(new(2026, 10));
+        Assert.Equal(30_000, resumen.CuentasFijas);
     }
 }

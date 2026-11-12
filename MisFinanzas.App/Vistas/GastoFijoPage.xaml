@@ -12,7 +12,7 @@
 
             <HorizontalStackLayout Spacing="12">
                 <Border Style="{StaticResource Burbuja}" WidthRequest="52" HeightRequest="52"
-                        StrokeShape="RoundRectangle 26" BackgroundColor="{StaticResource LilaSuave}">
+                        StrokeShape="RoundRectangle 26" BackgroundColor="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}">
                     <Label Text="🔁" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
                 <Label Text="{Binding Titulo}" Style="{StaticResource TituloPagina}" VerticalOptions="Center" />
@@ -70,7 +70,7 @@
                             <Label Text="Solo si la cuenta de este mes sigue pendiente." Style="{StaticResource TextoSuave}" />
                         </VerticalStackLayout>
                         <Switch Grid.Column="1" IsToggled="{Binding ActualizarMesActual}"
-                                OnColor="{StaticResource LilaClaro}" ThumbColor="{StaticResource Superficie}" />
+                                OnColor="{AppThemeBinding Light={StaticResource LilaClaro}, Dark={StaticResource LilaClaroOscuro}}" ThumbColor="{AppThemeBinding Light={StaticResource Superficie}, Dark={StaticResource SuperficieOscuro}}" />
                     </Grid>
 
                     <Label Text="Los meses pasados no cambian: cada mes guarda el monto que tenía."

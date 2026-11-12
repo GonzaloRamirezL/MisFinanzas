@@ -70,3 +70,32 @@ public class CompartirMaui : ICompartir
         });
     }
 }
+
+/// <summary>Guarda el tema elegido en las preferencias del teléfono y lo aplica.</summary>
+public class PreferenciaTemaMaui : IPreferenciaTema
+{
+    private const string Clave = "tema";
+
+    public TemaApp Actual =>
+        Enum.TryParse<TemaApp>(Preferences.Default.Get(Clave, nameof(TemaApp.Sistema)), out var t) ? t : TemaApp.Sistema;
+
+    public void Cambiar(TemaApp tema)
+    {
+        Preferences.Default.Set(Clave, tema.ToString());
+        Aplicar(tema);
+    }
+
+    /// <summary>Se llama al abrir la app para respetar lo que se eligió la última vez.</summary>
+    public void AplicarGuardado() => Aplicar(Actual);
+
+    private static void Aplicar(TemaApp tema)
+    {
+        if (Application.Current is null) return;
+        Application.Current.UserAppTheme = tema switch
+        {
+            TemaApp.Claro => AppTheme.Light,
+            TemaApp.Oscuro => AppTheme.Dark,
+            _ => AppTheme.Unspecified,
+        };
+    }
+}

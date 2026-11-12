@@ -35,6 +35,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDialogos, DialogosMaui>();
         builder.Services.AddSingleton<INavegacion, NavegacionMaui>();
         builder.Services.AddSingleton<ICompartir, CompartirMaui>();
+        builder.Services.AddSingleton<PreferenciaTemaMaui>();
+        builder.Services.AddSingleton<IPreferenciaTema>(sp => sp.GetRequiredService<PreferenciaTemaMaui>());
 
         // Pantallas
         builder.Services.AddSingleton<MesViewModel>();

@@ -12,7 +12,7 @@
 
             <HorizontalStackLayout Spacing="12">
                 <Border Style="{StaticResource Burbuja}" WidthRequest="52" HeightRequest="52"
-                        StrokeShape="RoundRectangle 26" BackgroundColor="{StaticResource LilaSuave}">
+                        StrokeShape="RoundRectangle 26" BackgroundColor="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}">
                     <Label Text="{Binding Emoji}" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
                 <Label Text="{Binding Titulo}" Style="{StaticResource TituloPagina}" VerticalOptions="Center" />
@@ -33,7 +33,7 @@
                         <FlexLayout BindableLayout.ItemsSource="{Binding EmojisSugeridos}" Wrap="Wrap" JustifyContent="Start">
                             <BindableLayout.ItemTemplate>
                                 <DataTemplate x:DataType="x:String">
-                                    <Border Style="{StaticResource Burbuja}" Margin="0,0,8,8" BackgroundColor="{StaticResource Fondo}">
+                                    <Border Style="{StaticResource Burbuja}" Margin="0,0,8,8" BackgroundColor="{AppThemeBinding Light={StaticResource Fondo}, Dark={StaticResource FondoOscuro}}">
                                         <Border.GestureRecognizers>
                                             <TapGestureRecognizer Tapped="AlTocarEmoji" />
                                         </Border.GestureRecognizers>

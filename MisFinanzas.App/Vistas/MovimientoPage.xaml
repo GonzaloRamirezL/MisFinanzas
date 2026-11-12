@@ -13,7 +13,7 @@
             <!-- Encabezado -->
             <HorizontalStackLayout Spacing="12">
                 <Border Style="{StaticResource Burbuja}" WidthRequest="52" HeightRequest="52"
-                        StrokeShape="RoundRectangle 26" BackgroundColor="{StaticResource LilaSuave}">
+                        StrokeShape="RoundRectangle 26" BackgroundColor="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}">
                     <Label Text="{Binding Emoji}" FontSize="24"
                            HorizontalOptions="Center" VerticalOptions="Center" />
                 </Border>
@@ -86,7 +86,7 @@
                             <Label Text="Si no, queda en «Por pagar aún»." Style="{StaticResource TextoSuave}" />
                         </VerticalStackLayout>
                         <Switch Grid.Column="1" IsToggled="{Binding Pagado}"
-                                OnColor="{StaticResource MentaClaro}" ThumbColor="{StaticResource Superficie}" />
+                                OnColor="{AppThemeBinding Light={StaticResource MentaClaro}, Dark={StaticResource MentaClaroOscuro}}" ThumbColor="{AppThemeBinding Light={StaticResource Superficie}, Dark={StaticResource SuperficieOscuro}}" />
                     </Grid>
 
                 </VerticalStackLayout>

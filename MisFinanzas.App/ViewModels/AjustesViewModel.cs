@@ -66,20 +66,23 @@ public class AjustesViewModel : Observable
     private readonly ServicioFinanzas _servicio;
     private readonly IDialogos _dialogos;
     private readonly INavegacion _navegacion;
+    private readonly IPreferenciaTema _tema;
 
     private List<Categoria> _todasLasCategorias = [];
     private Ajustes _ajustes = new();
 
-    public AjustesViewModel(ServicioFinanzas servicio, IDialogos dialogos, INavegacion navegacion)
+    public AjustesViewModel(ServicioFinanzas servicio, IDialogos dialogos, INavegacion navegacion, IPreferenciaTema tema)
     {
         _servicio = servicio;
         _dialogos = dialogos;
         _navegacion = navegacion;
+        _tema = tema;
 
         CargarCommand = new ComandoAsync(CargarAsync);
         AgregarCategoriaCommand = new ComandoAsync(() => AbrirCategoriaAsync(null));
         AgregarGastoFijoCommand = new ComandoAsync(() => AbrirGastoFijoAsync(null));
         EditarUmbralCommand = new ComandoAsync(p => EditarUmbralAsync(p as string ?? ""));
+        CambiarTemaCommand = new ComandoAsync(CambiarTemaAsync);
     }
 
     public ICommand CargarCommand { get; }
@@ -87,6 +90,16 @@ public class AjustesViewModel : Observable
     public ICommand AgregarGastoFijoCommand { get; }
     /// <summary>Parámetro: "SubidaCuenta", "GastoIngreso" o "AlLimite".</summary>
     public ICommand EditarUmbralCommand { get; }
+    public ICommand CambiarTemaCommand { get; }
+
+    private static readonly (TemaApp Tema, string Texto)[] OpcionesTema =
+    [
+        (TemaApp.Sistema, "Automático (como el teléfono)"),
+        (TemaApp.Claro, "Claro ☀️"),
+        (TemaApp.Oscuro, "Oscuro 🌙"),
+    ];
+
+    public string TemaTexto => OpcionesTema.First(o => o.Tema == _tema.Actual).Texto;
 
     public IReadOnlyList<CategoriaAjusteItem> Categorias { get; private set; } = [];
     public IReadOnlyList<CategoriaAjusteItem> CategoriasArchivadas { get; private set; } = [];
@@ -126,7 +139,7 @@ public class AjustesViewModel : Observable
 
         Notificar(nameof(Categorias), nameof(CategoriasArchivadas), nameof(HayArchivadas),
             nameof(GastosFijos), nameof(SinGastosFijos), nameof(TotalGastosFijosTexto),
-            nameof(UmbralSubidaTexto), nameof(UmbralGastoTexto), nameof(UmbralLimiteTexto));
+            nameof(UmbralSubidaTexto), nameof(UmbralGastoTexto), nameof(UmbralLimiteTexto), nameof(TemaTexto));
     }
 
     // ───────────── Categorías ─────────────
@@ -213,20 +226,34 @@ public class AjustesViewModel : Observable
                 break;
 
             case eliminar:
-                if (!await _dialogos.ConfirmarAsync($"¿Eliminar {item.Concepto}?", "Se borra de la lista de gastos fijos."))
-                    return;
-                if (!await _servicio.EliminarGastoFijoAsync(item.Modelo))
+                var meses = await _servicio.ContarMesesDeGastoFijoAsync(item.Modelo);
+                var detalle = meses switch
                 {
-                    await _dialogos.AvisarAsync("No se puede eliminar",
-                        "Este gasto ya aparece en meses registrados. Usa \"Dejar de pagarlo\" para que no siga apareciendo.");
+                    0 => "Se borra de la lista de gastos fijos.",
+                    1 => "También se borra del mes donde ya aparece (aunque esté pagado) y ese total se recalcula.",
+                    _ => $"También se borra de los {meses} meses donde ya aparece (aunque esté pagado) y esos totales se recalculan.",
+                };
+                if (!await _dialogos.ConfirmarAsync($"¿Eliminar {item.Concepto}?",
+                        $"{detalle} Esto no se puede deshacer.", "Eliminar", "Cancelar"))
                     return;
-                }
+                await _servicio.EliminarGastoFijoAsync(item.Modelo);
                 break;
 
             default:
                 return;
         }
         await CargarAsync();
+    }
+
+    // ───────────── Apariencia ─────────────
+
+    private async Task CambiarTemaAsync()
+    {
+        var eleccion = await _dialogos.ElegirAsync("Apariencia", null, [.. OpcionesTema.Select(o => o.Texto)]);
+        var opcion = OpcionesTema.FirstOrDefault(o => o.Texto == eleccion);
+        if (opcion.Texto is null) return;
+        _tema.Cambiar(opcion.Tema);
+        Notificar(nameof(TemaTexto));
     }
 
     // ───────────── Umbrales de alerta ─────────────
