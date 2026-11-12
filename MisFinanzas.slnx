@@ -1,5 +1,6 @@
 <Solution>
   <Folder Name="/src/">
+    <Project Path="MisFinanzas.App/MisFinanzas.App.csproj" Id="3dc57188-0c46-40f0-85bb-e7c9f53ed863" />
     <Project Path="src/MisFinanzas.Core/MisFinanzas.Core.csproj" />
     <Project Path="src/MisFinanzas.Datos/MisFinanzas.Datos.csproj" />
   </Folder>

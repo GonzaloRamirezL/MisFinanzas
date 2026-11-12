@@ -16,6 +16,12 @@ public class SqliteFinanzasRepositorio : IFinanzasRepositorio
     // "Id" pasa a ser llave primaria autoincremental sin tener que ensuciar los modelos con atributos.
     private const CreateFlags LlaveImplicita = CreateFlags.ImplicitPK | CreateFlags.AutoIncPK;
 
+    static SqliteFinanzasRepositorio()
+    {
+        // Con sqlite-net-base hay que inicializar la librería nativa de SQLite una vez antes de usarla.
+        SQLitePCL.Batteries_V2.Init();
+    }
+
     public SqliteFinanzasRepositorio(string rutaBaseDatos)
     {
         _db = new SQLiteAsyncConnection(rutaBaseDatos,

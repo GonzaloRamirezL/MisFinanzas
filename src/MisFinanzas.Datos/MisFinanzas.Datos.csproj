@@ -7,8 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.10" />
+    <!--
+      sqlite-net-base es sqlite-net sin la librería nativa de SQLite incluida.
+      La librería nativa la aporta SQLitePCLRaw.bundle_e_sqlite3 3.x, que reemplaza a
+      bundle_green 2.1.x (marcada con una vulnerabilidad de severidad alta).
+    -->
+    <PackageReference Include="sqlite-net-base" Version="1.9.172" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
   </ItemGroup>
 
   <ItemGroup>

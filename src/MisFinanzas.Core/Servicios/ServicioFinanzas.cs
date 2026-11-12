@@ -15,6 +15,12 @@ public class ServicioFinanzas(IFinanzasRepositorio repo, Func<DateTime>? reloj =
 
     public Periodo PeriodoActual => Periodo.DesdeFecha(_hoy());
 
+    /// <summary>
+    /// Prepara la base de datos (tablas y datos iniciales). Se llama al abrir la app;
+    /// es seguro llamarlo más de una vez.
+    /// </summary>
+    public Task InicializarAsync() => repo.InicializarAsync();
+
     // ───────────── Meses ─────────────
 
     /// <summary>
@@ -168,7 +174,11 @@ public class ServicioFinanzas(IFinanzasRepositorio repo, Func<DateTime>? reloj =
     /// Crea o edita un gasto permanente. Si es nuevo, aparece de inmediato en los meses
     /// ya abiertos que caen dentro de su rango. Editar el monto no cambia meses pasados.
     /// </summary>
-    public async Task GuardarGastoFijoAsync(GastoFijo gasto)
+    /// <param name="actualizarMesActual">
+    /// Si es true y la cuenta del mes actual sigue pendiente, también se le aplican
+    /// el nuevo concepto, categoría y monto (útil cuando sube el precio de una suscripción).
+    /// </param>
+    public async Task GuardarGastoFijoAsync(GastoFijo gasto, bool actualizarMesActual = false)
     {
         if (string.IsNullOrWhiteSpace(gasto.Concepto))
             throw new ArgumentException("El gasto necesita un concepto.");
@@ -179,11 +189,41 @@ public class ServicioFinanzas(IFinanzasRepositorio repo, Func<DateTime>? reloj =
         if (gasto.HastaClave is not null && gasto.HastaClave < gasto.DesdeClave)
             throw new ArgumentException("El mes \"hasta\" no puede ser anterior al mes \"desde\".");
 
+        var esNuevo = gasto.Id == 0;
+        gasto.Concepto = gasto.Concepto.Trim();
         await repo.GuardarGastoFijoAsync(gasto);
+
+        if (!esNuevo)
+        {
+            foreach (var mov in await repo.ObtenerMovimientosDeGastoFijoAsync(gasto.Id))
+            {
+                // Si se acortó el rango, salen los meses que quedaron fuera (solo si seguían pendientes).
+                if (!gasto.AplicaEn(Periodo.DesdeClave(mov.MesClave)))
+                {
+                    if (mov.Estado == EstadoPago.Pendiente)
+                        await repo.EliminarMovimientoAsync(mov.Id);
+                }
+                else if (actualizarMesActual && mov.MesClave == PeriodoActual.Clave
+                         && mov.Estado == EstadoPago.Pendiente && !mov.Omitido)
+                {
+                    mov.Concepto = gasto.Concepto;
+                    mov.CategoriaId = gasto.CategoriaId;
+                    mov.Monto = gasto.MontoHabitual;
+                    await repo.GuardarMovimientoAsync(mov);
+                }
+            }
+        }
 
         foreach (var mes in await repo.ObtenerMesesAsync())
             if (gasto.AplicaEn(mes.Periodo))
                 await SincronizarCuentasFijasAsync(mes.Periodo);
+    }
+
+    /// <summary>Vuelve a activar una categoría archivada.</summary>
+    public async Task RestaurarCategoriaAsync(Categoria categoria)
+    {
+        categoria.Activa = true;
+        await repo.GuardarCategoriaAsync(categoria);
     }
 
     /// <summary>

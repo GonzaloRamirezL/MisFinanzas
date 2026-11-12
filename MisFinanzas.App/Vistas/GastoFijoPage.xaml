@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MisFinanzas.App.Vistas.GastoFijoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MisFinanzas.App.ViewModels"
+    x:DataType="vm:GastoFijoFormViewModel"
+    Title="{Binding Titulo}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,24,20,32" Spacing="18">
+
+            <HorizontalStackLayout Spacing="12">
+                <Border Style="{StaticResource Burbuja}" WidthRequest="52" HeightRequest="52"
+                        StrokeShape="RoundRectangle 26" BackgroundColor="{StaticResource LilaSuave}">
+                    <Label Text="🔁" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Text="{Binding Titulo}" Style="{StaticResource TituloPagina}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="14">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Concepto" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Entry Text="{Binding Concepto}" Placeholder="Ej: Luz, Internet, Netflix" MaxLength="80" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Monto habitual" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4">
+                                <Label Text="$" Style="{StaticResource TextoFuerte}" VerticalOptions="Center" />
+                                <Entry Grid.Column="1" Text="{Binding MontoTexto}" Placeholder="0"
+                                       Keyboard="Numeric" MaxLength="14" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Categoría" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Picker ItemsSource="{Binding Categorias}" SelectedItem="{Binding CategoriaSeleccionada}"
+                                    Title="Elige una categoría" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="6">
+                            <Label Text="Desde" Style="{StaticResource EtiquetaCampo}" />
+                            <Border Style="{StaticResource CajaCampo}">
+                                <Picker ItemsSource="{Binding MesesDesde}" SelectedItem="{Binding DesdeSeleccionado}"
+                                        Title="Desde" />
+                            </Border>
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="Hasta" Style="{StaticResource EtiquetaCampo}" />
+                            <Border Style="{StaticResource CajaCampo}">
+                                <Picker ItemsSource="{Binding MesesHasta}" SelectedItem="{Binding HastaSeleccionado}"
+                                        Title="Hasta" />
+                            </Border>
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding EsEdicion}">
+                        <VerticalStackLayout VerticalOptions="Center" Spacing="0">
+                            <Label Text="Aplicar también a este mes" Style="{StaticResource TextoFuerte}" />
+                            <Label Text="Solo si la cuenta de este mes sigue pendiente." Style="{StaticResource TextoSuave}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" IsToggled="{Binding ActualizarMesActual}"
+                                OnColor="{StaticResource LilaClaro}" ThumbColor="{StaticResource Superficie}" />
+                    </Grid>
+
+                    <Label Text="Los meses pasados no cambian: cada mes guarda el monto que tenía."
+                           Style="{StaticResource TextoSuave}" />
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar" Style="{StaticResource BotonPrincipal}" Command="{Binding GuardarCommand}" />
+            <Button Text="Cancelar" Style="{StaticResource BotonTexto}" Command="{Binding CancelarCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

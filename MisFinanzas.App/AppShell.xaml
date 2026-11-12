@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="MisFinanzas.App.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vistas="clr-namespace:MisFinanzas.App.Vistas"
+    Title="Mis Finanzas">
+
+    <!-- Pestañas de abajo. Las páginas se crean con inyección de dependencias (ver MauiProgram). -->
+    <TabBar>
+        <ShellContent Title="Mes" Route="mes" ContentTemplate="{DataTemplate vistas:MesPage}" />
+        <ShellContent Title="Resumen" Route="resumen" ContentTemplate="{DataTemplate vistas:ResumenPage}" />
+        <ShellContent Title="Ajustes" Route="ajustes" ContentTemplate="{DataTemplate vistas:AjustesPage}" />
+    </TabBar>
+
+</Shell>

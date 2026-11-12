@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MisFinanzas.App.Vistas.MesPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MisFinanzas.App.ViewModels"
+    x:DataType="vm:MesViewModel"
+    Shell.NavBarIsVisible="False"
+    Title="Mes">
+
+    <ContentPage.Resources>
+
+        <!-- Una fila de movimiento: emoji, concepto, detalle, monto y estado -->
+        <DataTemplate x:Key="PlantillaMovimiento" x:DataType="vm:MovimientoItem">
+            <Grid Padding="2,8" ColumnDefinitions="40,*,Auto" ColumnSpacing="12">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding TocarCommand}" />
+                </Grid.GestureRecognizers>
+
+                <Border Style="{StaticResource Burbuja}">
+                    <Label Text="{Binding Emoji}" FontSize="18"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+
+                <VerticalStackLayout Grid.Column="1" VerticalOptions="Center" Spacing="1">
+                    <Label Text="{Binding Concepto}" Style="{StaticResource TextoFuerte}"
+                           LineBreakMode="TailTruncation" />
+                    <Label Text="{Binding Detalle}" Style="{StaticResource TextoSuave}" />
+                </VerticalStackLayout>
+
+                <VerticalStackLayout Grid.Column="2" VerticalOptions="Center" Spacing="4">
+                    <Label Text="{Binding MontoTexto}" Style="{StaticResource Monto}" />
+                    <Border Style="{StaticResource Pildora}" BackgroundColor="{StaticResource AmbarSuave}"
+                            IsVisible="{Binding MuestraEstado}">
+                        <Border.Triggers>
+                            <DataTrigger TargetType="Border" Binding="{Binding EstaPagado}" Value="True">
+                                <Setter Property="BackgroundColor" Value="{StaticResource MentaSuave}" />
+                            </DataTrigger>
+                        </Border.Triggers>
+                        <Label Text="{Binding EstadoTexto}" FontSize="11" FontFamily="RedondaMedia"
+                               TextColor="{StaticResource Ambar}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding EstaPagado}" Value="True">
+                                    <Setter Property="TextColor" Value="{StaticResource Menta}" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </Border>
+                </VerticalStackLayout>
+            </Grid>
+        </DataTemplate>
+
+        <!-- Una fila de "¿En qué se fue?" -->
+        <DataTemplate x:Key="PlantillaCategoria" x:DataType="vm:CategoriaItem">
+            <Grid Padding="2,6" ColumnDefinitions="40,*,Auto" RowDefinitions="Auto,Auto"
+                  ColumnSpacing="12" RowSpacing="6">
+                <Border Grid.RowSpan="2" Style="{StaticResource Burbuja}" BackgroundColor="{StaticResource LilaSuave}">
+                    <Label Text="{Binding Emoji}" FontSize="18"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Grid.Column="1" Text="{Binding Nombre}" Style="{StaticResource TextoFuerte}" />
+                <Label Grid.Column="2" Text="{Binding GastadoTexto}" Style="{StaticResource Monto}" />
+                <VerticalStackLayout Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="2" Spacing="4">
+                    <ProgressBar Progress="{Binding Progreso}" IsVisible="{Binding TienePresupuesto}"
+                                 ProgressColor="{StaticResource MentaClaro}" ScaleY="2">
+                        <ProgressBar.Triggers>
+                            <DataTrigger TargetType="ProgressBar" Binding="{Binding Estado}" Value="AlLimite">
+                                <Setter Property="ProgressColor" Value="{StaticResource AmbarClaro}" />
+                            </DataTrigger>
+                            <DataTrigger TargetType="ProgressBar" Binding="{Binding Estado}" Value="MePase">
+                                <Setter Property="ProgressColor" Value="{StaticResource CoralClaro}" />
+                            </DataTrigger>
+                        </ProgressBar.Triggers>
+                    </ProgressBar>
+                    <Label Text="{Binding DetalleTexto}" Style="{StaticResource TextoSuave}" />
+                </VerticalStackLayout>
+            </Grid>
+        </DataTemplate>
+
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16,20,32" Spacing="18">
+
+            <!-- Encabezado con cambio de mes -->
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Button Text="‹" Style="{StaticResource BotonCirculo}" Command="{Binding MesAnteriorCommand}" />
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center" Spacing="0">
+                    <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
+                        <Image Source="logo_moneda.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                        <Label Text="Mis finanzas" Style="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                    </HorizontalStackLayout>
+                    <Label Text="{Binding TituloMes}" Style="{StaticResource TituloPagina}" HorizontalOptions="Center" />
+                    <Label Text="Volver al mes actual" TextColor="{StaticResource Lila}" FontSize="13"
+                           FontFamily="RedondaMedia" HorizontalOptions="Center" IsVisible="{Binding NoEsMesActual}">
+                        <Label.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding IrAMesActualCommand}" />
+                        </Label.GestureRecognizers>
+                    </Label>
+                </VerticalStackLayout>
+                <Button Grid.Column="2" Text="›" Style="{StaticResource BotonCirculo}" Command="{Binding MesSiguienteCommand}" />
+            </Grid>
+
+            <ActivityIndicator IsRunning="{Binding Cargando}" IsVisible="{Binding Cargando}"
+                               Color="{StaticResource Lila}" HeightRequest="24" />
+
+            <!-- Tarjeta principal: Me queda -->
+            <Border Style="{StaticResource Tarjeta}" Stroke="Transparent" Padding="22">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource HeroInicio}" Offset="0" />
+                        <GradientStop Color="{StaticResource HeroFin}" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <VerticalStackLayout Spacing="14">
+                    <VerticalStackLayout Spacing="0">
+                        <Label Text="✨ Me queda" Style="{StaticResource TextoFuerte}" />
+                        <Label Text="{Binding MeQuedaTexto}" Style="{StaticResource MontoGrande}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding MeQuedaNegativo}" Value="True">
+                                    <Setter Property="TextColor" Value="{StaticResource Coral}" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="💰 Ingresos" Style="{StaticResource TextoSuave}" />
+                            <Label Text="{Binding IngresosTexto}" Style="{StaticResource TextoFuerte}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label Text="💸 Gastos" Style="{StaticResource TextoSuave}" />
+                            <Label Text="{Binding GastosTexto}" Style="{StaticResource TextoFuerte}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <VerticalStackLayout Spacing="6">
+                        <ProgressBar Progress="{Binding PorcentajeGastado}" ProgressColor="{StaticResource Lila}" ScaleY="2">
+                            <ProgressBar.Triggers>
+                                <DataTrigger TargetType="ProgressBar" Binding="{Binding SuperaUmbralGasto}" Value="True">
+                                    <Setter Property="ProgressColor" Value="{StaticResource Coral}" />
+                                </DataTrigger>
+                            </ProgressBar.Triggers>
+                        </ProgressBar>
+                        <Label Text="{Binding PorcentajeGastadoTexto}" Style="{StaticResource TextoSuave}" />
+                    </VerticalStackLayout>
+
+                    <Border Style="{StaticResource Pildora}" BackgroundColor="{StaticResource Superficie}"
+                            HorizontalOptions="Start" IsVisible="{Binding HayPorPagar}">
+                        <Label FontSize="13" TextColor="{StaticResource Ambar}" FontFamily="RedondaMedia">
+                            <Label.FormattedText>
+                                <FormattedString>
+                                    <Span Text="⏳ Por pagar aún: " />
+                                    <Span Text="{Binding PorPagarTexto}" FontFamily="RedondaNegrita" />
+                                </FormattedString>
+                            </Label.FormattedText>
+                        </Label>
+                    </Border>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Sueldo -->
+            <Border Style="{StaticResource Tarjeta}" Padding="18,12">
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <VerticalStackLayout VerticalOptions="Center" Spacing="0">
+                        <Label Text="💼 Sueldo del mes" Style="{StaticResource TextoSuave}" />
+                        <Label Text="{Binding SueldoTexto}" Style="{StaticResource TituloSeccion}" />
+                    </VerticalStackLayout>
+                    <Button Grid.Column="1" Text="Editar" Style="{StaticResource BotonSuave}"
+                            HeightRequest="40" Padding="18,0" Command="{Binding EditarSueldoCommand}" />
+                </Grid>
+            </Border>
+
+            <!-- Compras -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="6">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                        <Label Text="🛍️ Compras" Style="{StaticResource TituloSeccion}" />
+                        <Label Grid.Column="1" Text="{Binding TotalComprasTexto}" Style="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                        <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
+                                Command="{Binding AgregarCommand}" CommandParameter="Compra" />
+                    </Grid>
+                    <Label Text="Sin compras este mes." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinCompras}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Compras}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Alertas -->
+            <Border Style="{StaticResource TarjetaAlerta}" IsVisible="{Binding HayAlertas}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="😬 Ojo con esto" FontFamily="RedondaNegrita" TextColor="{StaticResource Coral}" />
+                    <VerticalStackLayout Spacing="4" BindableLayout.ItemsSource="{Binding Alertas}">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="x:String">
+                                <Label Text="{Binding .}" FontSize="13" TextColor="{StaticResource Coral}" />
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Cuentas fijas -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="6">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                        <Label Text="🏠 Cuentas fijas" Style="{StaticResource TituloSeccion}" />
+                        <Label Grid.Column="1" Text="{Binding TotalCuentasFijasTexto}" Style="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                        <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
+                                Command="{Binding AgregarCommand}" CommandParameter="CuentaFija" />
+                    </Grid>
+                    <Label Text="Aún no hay cuentas fijas este mes." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinCuentasFijas}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding CuentasFijas}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Deudas y gastos -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="6">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                        <Label Text="💳 Deudas y gastos" Style="{StaticResource TituloSeccion}" />
+                        <Label Grid.Column="1" Text="{Binding TotalDeudasTexto}" Style="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                        <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
+                                Command="{Binding AgregarCommand}" CommandParameter="Deuda" />
+                    </Grid>
+                    <Label Text="Nada por aquí." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinDeudas}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Deudas}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Me pagaron -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="6">
+                    <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="10">
+                        <Label Text="📥 Me pagaron" Style="{StaticResource TituloSeccion}" />
+                        <Label Grid.Column="1" Text="{Binding TotalPagosRecibidosTexto}" Style="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                        <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
+                                Command="{Binding AgregarCommand}" CommandParameter="PagoRecibido" />
+                    </Grid>
+                    <Label Text="Aquí van los pagos que te hagan." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinPagosRecibidos}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding PagosRecibidos}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ¿En qué se fue? -->
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="🎨 ¿En qué se fue?" Style="{StaticResource TituloSeccion}" />
+                    <Label Text="Cuando registres gastos verás aquí cómo se reparten." Style="{StaticResource TextoSuave}"
+                           IsVisible="{Binding SinGastosPorCategoria}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding PorCategoria}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaCategoria}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="📤 Exportar este mes (.md)" Style="{StaticResource BotonSuave}"
+                    Command="{Binding ExportarCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

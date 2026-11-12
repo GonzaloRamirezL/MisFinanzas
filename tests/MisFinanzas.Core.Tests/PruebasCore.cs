@@ -274,3 +274,90 @@ public class PruebasExportacion
         Assert.Contains("| 🌸 Personal | $45.000 | $45.000 | $45.000 |", historial);
     }
 }
+
+public class PruebasAjustes
+{
+    private static (ServicioFinanzas, RepositorioEnMemoria) Crear(DateTime hoy)
+    {
+        var repo = new RepositorioEnMemoria();
+        repo.InicializarAsync().Wait();
+        return (new ServicioFinanzas(repo, () => hoy), repo);
+    }
+
+    [Fact]
+    public async Task Editar_gasto_fijo_puede_actualizar_el_mes_actual_si_esta_pendiente()
+    {
+        var (s, _) = Crear(new DateTime(2026, 11, 12));
+        var netflix = new GastoFijo { Concepto = "Netflix", CategoriaId = 2, MontoHabitual = 14_400 };
+        await s.GuardarGastoFijoAsync(netflix);
+        await s.AbrirMesActualAsync();
+
+        netflix.MontoHabitual = 15_900;
+        await s.GuardarGastoFijoAsync(netflix); // sin actualizar: el mes queda igual
+        Assert.Equal(14_400, (await s.ObtenerMovimientosAsync(s.PeriodoActual)).Single().Monto);
+
+        await s.GuardarGastoFijoAsync(netflix, actualizarMesActual: true);
+        Assert.Equal(15_900, (await s.ObtenerMovimientosAsync(s.PeriodoActual)).Single().Monto);
+    }
+
+    [Fact]
+    public async Task Actualizar_mes_actual_no_toca_cuentas_ya_pagadas()
+    {
+        var (s, _) = Crear(new DateTime(2026, 11, 12));
+        var luz = new GastoFijo { Concepto = "Luz", CategoriaId = 1, MontoHabitual = 80_000 };
+        await s.GuardarGastoFijoAsync(luz);
+        await s.AbrirMesActualAsync();
+        await s.CambiarEstadoAsync((await s.ObtenerMovimientosAsync(s.PeriodoActual)).Single(), EstadoPago.Pagado);
+
+        luz.MontoHabitual = 90_000;
+        await s.GuardarGastoFijoAsync(luz, actualizarMesActual: true);
+        Assert.Equal(80_000, (await s.ObtenerMovimientosAsync(s.PeriodoActual)).Single().Monto);
+    }
+
+    [Fact]
+    public async Task Mover_el_desde_hacia_adelante_saca_meses_pendientes_que_quedaron_fuera()
+    {
+        var (s, _) = Crear(new DateTime(2026, 11, 12));
+        var gym = new GastoFijo { Concepto = "Gimnasio", CategoriaId = 7, MontoHabitual = 25_000, DesdeClave = 202611 };
+        await s.GuardarGastoFijoAsync(gym);
+        await s.AbrirMesAsync(new(2026, 11));
+        await s.AbrirMesAsync(new(2026, 12));
+
+        gym.DesdeClave = 202612;
+        await s.GuardarGastoFijoAsync(gym);
+
+        Assert.Empty(await s.ObtenerMovimientosAsync(new(2026, 11)));
+        Assert.Single(await s.ObtenerMovimientosAsync(new(2026, 12)));
+    }
+
+    [Fact]
+    public async Task Restaurar_categoria_archivada()
+    {
+        var (s, _) = Crear(new DateTime(2026, 11, 12));
+        var otros = (await s.ObtenerCategoriasAsync()).Single(c => c.Nombre == "Otros");
+        await s.GuardarGastoFijoAsync(new GastoFijo { Concepto = "X", CategoriaId = otros.Id, MontoHabitual = 1 });
+        Assert.False(await s.QuitarCategoriaAsync(otros));
+        await s.RestaurarCategoriaAsync(otros);
+        Assert.Contains(await s.ObtenerCategoriasAsync(), c => c.Id == otros.Id);
+    }
+}
+
+public class PruebasResumen
+{
+    [Fact]
+    public void Gasto_por_categoria_acumula_todos_los_meses()
+    {
+        static ResumenCategoria Cat(int id, string n, decimal g) =>
+            new(id, n, "🏷️", g, null, AlertaPresupuesto.SinPresupuesto);
+
+        var nov = new ResumenMes { Periodo = new(2026, 11), PorCategoria = [Cat(1, "Servicios", 100), Cat(2, "Hogar", 50), Cat(3, "Otros", 0)] };
+        var dic = new ResumenMes { Periodo = new(2026, 12), PorCategoria = [Cat(1, "Servicios", 120), Cat(2, "Hogar", 300)] };
+
+        var cats = Calculadora.CalcularGeneral([nov, dic]).GastoPorCategoria;
+
+        Assert.Equal(2, cats.Count);                    // "Otros" sin gasto no aparece
+        Assert.Equal("Hogar", cats[0].Nombre);          // ordenado de mayor a menor
+        Assert.Equal(350, cats[0].Gastado);
+        Assert.Equal(220, cats[1].Gastado);
+    }
+}

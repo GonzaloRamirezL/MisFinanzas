@@ -10,16 +10,18 @@ Nació para reemplazar una planilla Excel con resumen mensual, cuentas fijas, de
 - Deudas y gastos con estado Pagado/Pendiente, compras con fecha y pagos recibidos.
 - Cálculos: ingresos, gastos, "me queda", "por pagar", % del ingreso gastado y gasto por categoría vs presupuesto.
 - Alertas: categoría al límite o excedida, cuenta que subió más de X % respecto del mes anterior y gasto sobre X % del ingreso.
-- **Exportación a Markdown** (mes o historial), pensada para guardarla en Drive o dársela a una IA para que la analice.
+- **Resumen** con ahorro acumulado, gasto promedio, mes más caro, gráfico mes a mes y gasto acumulado por categoría (6 meses, 12 meses o todo).
+- **Exportación a Markdown** (mes o historial completo), pensada para guardarla en Drive o dársela a una IA para que la analice.
+- Diseño propio en tonos lila pastel, con logo e ícono originales.
 
 ## Arquitectura
 
 ```
 MisFinanzas.slnx
+├── MisFinanzas.App           → interfaz .NET MAUI (MVVM, Android)
 ├── src/
 │   ├── MisFinanzas.Core      → modelos, reglas de negocio, cálculos y exportación (sin dependencias)
-│   ├── MisFinanzas.Datos     → implementación SQLite (sqlite-net-pcl)
-│   └── MisFinanzas.App       → interfaz .NET MAUI (paso 2)
+│   └── MisFinanzas.Datos     → implementación SQLite (sqlite-net + SQLitePCLRaw 3)
 └── tests/
     └── MisFinanzas.Core.Tests → pruebas xUnit con repositorio en memoria
 ```
@@ -27,6 +29,14 @@ MisFinanzas.slnx
 - `Core` no conoce SQLite ni MAUI. Recibe un `IFinanzasRepositorio` y por eso se puede probar sin teléfono.
 - `Calculadora` es código puro (datos de entrada → resultados) y reemplaza las fórmulas del Excel.
 - `ServicioFinanzas` concentra las reglas: no duplica cuentas fijas, no altera meses pasados al cambiar un monto y archiva lo que tiene historial.
+- Los ViewModels de la app no dependen de MAUI: usan interfaces (`IDialogos`, `INavegacion`, `ICompartir`) y se pueden probar como código .NET normal.
+
+## Guías paso a paso
+
+1. [Preparar el PC y el núcleo](docs/paso-1-preparacion.md)
+2. [Estilo visual y pantalla del mes](docs/paso-2-pantalla-del-mes.md)
+3. [Ajustes y paleta lila](docs/paso-3-ajustes.md)
+4. [Resumen e historial](docs/paso-4-resumen.md)
 
 ## Cómo correr las pruebas
 

@@ -72,4 +72,17 @@ public record ResumenGeneral
     public decimal GastoPromedio => Meses.Count == 0 ? 0 : TotalGastos / Meses.Count;
     /// <summary>"Mes más caro". null si no hay meses.</summary>
     public ResumenMes? MesMasCaro => Meses.Count == 0 ? null : Meses.MaxBy(m => m.TotalGastos);
+
+    /// <summary>
+    /// Gasto acumulado por categoría en todos los meses del resumen, de mayor a menor.
+    /// Solo incluye categorías con gasto. El presupuesto no aplica (es mensual).
+    /// </summary>
+    public IReadOnlyList<ResumenCategoria> GastoPorCategoria => Meses
+        .SelectMany(m => m.PorCategoria)
+        .GroupBy(c => c.CategoriaId)
+        .Select(g => new ResumenCategoria(g.Key, g.First().Nombre, g.First().Emoji,
+            g.Sum(c => c.Gastado), null, AlertaPresupuesto.SinPresupuesto))
+        .Where(c => c.Gastado > 0)
+        .OrderByDescending(c => c.Gastado)
+        .ToList();
 }

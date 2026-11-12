@@ -220,7 +220,8 @@ public class ExportadorMarkdown(Func<DateTime>? reloj = null)
         sb.AppendLine();
     }
 
-    private static IEnumerable<string> DescribirAlertas(ResumenMes r, Ajustes ajustes)
+    /// <summary>Alertas de un mes en texto legible. La app las muestra tal cual en la pantalla del mes.</summary>
+    public static IEnumerable<string> DescribirAlertas(ResumenMes r, Ajustes ajustes)
     {
         if (r.SuperaUmbralGasto)
             yield return $"Gasto del {Formato.Porcentaje(r.PorcentajeGastado)} del ingreso (límite configurado: {Formato.Porcentaje(ajustes.UmbralGastoIngreso)}).";
@@ -232,7 +233,7 @@ public class ExportadorMarkdown(Func<DateTime>? reloj = null)
             yield return $"{s.Concepto} subió {Formato.Porcentaje(s.Variacion)} ({Formato.Pesos(s.MontoAnterior)} → {Formato.Pesos(s.MontoActual)}).";
     }
 
-    private static string TextoAlerta(AlertaPresupuesto alerta) => alerta switch
+    public static string TextoAlerta(AlertaPresupuesto alerta) => alerta switch
     {
         AlertaPresupuesto.MePase => "Me pasé",
         AlertaPresupuesto.AlLimite => "Al límite",

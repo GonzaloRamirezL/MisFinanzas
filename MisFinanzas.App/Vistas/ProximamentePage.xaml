@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MisFinanzas.App.Vistas.ProximamentePage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    Shell.NavBarIsVisible="False">
+
+    <!-- Pantalla temporal para las pestañas que se construyen en los próximos pasos. -->
+    <Grid Padding="24">
+        <Border Style="{StaticResource Tarjeta}" VerticalOptions="Center">
+            <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                <Label Text="🌱" FontSize="48" HorizontalOptions="Center" />
+                <Label x:Name="TituloLabel" Style="{StaticResource TituloPagina}" HorizontalOptions="Center" />
+                <Label x:Name="DescripcionLabel" Style="{StaticResource TextoSuave}"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </Border>
+    </Grid>
+</ContentPage>

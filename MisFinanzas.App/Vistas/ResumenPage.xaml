@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MisFinanzas.App.Vistas.ResumenPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MisFinanzas.App.ViewModels"
+    x:DataType="vm:ResumenViewModel"
+    Shell.NavBarIsVisible="False"
+    Title="Resumen">
+
+    <ContentPage.Resources>
+
+        <!-- Píldora del selector de rango (6 meses / 12 meses / Todo) -->
+        <Style x:Key="OpcionRango" TargetType="Border">
+            <Setter Property="StrokeThickness" Value="0" />
+            <Setter Property="StrokeShape" Value="RoundRectangle 999" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="BackgroundColor" Value="{StaticResource Superficie}" />
+        </Style>
+
+        <!-- Fila de "Mes a mes": nombre, lo que quedó y dos barras -->
+        <DataTemplate x:Key="PlantillaMes" x:DataType="vm:MesResumenItem">
+            <VerticalStackLayout Spacing="5" Padding="0,8">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding Titulo}" Style="{StaticResource TextoFuerte}" />
+                    <Label Grid.Column="1" Text="{Binding MeQuedoTexto}" Style="{StaticResource Monto}" TextColor="{StaticResource Menta}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding MeQuedoNegativo}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource Coral}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Grid>
+                <BoxView HeightRequest="10" CornerRadius="5" HorizontalOptions="Start"
+                         Color="{StaticResource LilaClaro}" WidthRequest="{Binding AnchoIngresos}" />
+                <BoxView HeightRequest="10" CornerRadius="5" HorizontalOptions="Start"
+                         Color="{StaticResource RosaClaro}" WidthRequest="{Binding AnchoGastos}" />
+                <Label Style="{StaticResource TextoSuave}" FontSize="12">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding IngresosTexto}" />
+                            <Span Text=" · " />
+                            <Span Text="{Binding GastosTexto}" />
+                            <Span Text=" · " />
+                            <Span Text="{Binding PorcentajeTexto}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
+            </VerticalStackLayout>
+        </DataTemplate>
+
+        <!-- Fila de categoría acumulada -->
+        <DataTemplate x:Key="PlantillaCategoria" x:DataType="vm:CategoriaTotalItem">
+            <VerticalStackLayout Spacing="5" Padding="0,6">
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="8">
+                    <Label Text="{Binding Emoji}" FontSize="16" VerticalOptions="Center" />
+                    <Label Grid.Column="1" Text="{Binding Nombre}" Style="{StaticResource TextoFuerte}" VerticalOptions="Center" />
+                    <Label Grid.Column="2" Text="{Binding TotalTexto}" Style="{StaticResource Monto}" VerticalOptions="Center" />
+                </Grid>
+                <BoxView HeightRequest="8" CornerRadius="4" HorizontalOptions="Start"
+                         Color="{StaticResource LilaClaro}" WidthRequest="{Binding Ancho}" />
+                <Label Text="{Binding PorcentajeTexto}" Style="{StaticResource TextoSuave}" FontSize="12" />
+            </VerticalStackLayout>
+        </DataTemplate>
+
+    </ContentPage.Resources>
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,16,20,32" Spacing="18">
+
+            <!-- Encabezado -->
+            <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                <HorizontalStackLayout Spacing="6" HorizontalOptions="Center">
+                    <Image Source="logo_moneda.png" WidthRequest="18" HeightRequest="18" VerticalOptions="Center" />
+                    <Label Text="Mis finanzas" Style="{StaticResource TextoSuave}" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+                <Label Text="Resumen" Style="{StaticResource TituloPagina}" HorizontalOptions="Center" />
+            </VerticalStackLayout>
+
+            <!-- Selector de rango -->
+            <HorizontalStackLayout Spacing="8" HorizontalOptions="Center">
+                <Border Style="{StaticResource OpcionRango}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CambiarRangoCommand}" CommandParameter="SeisMeses" />
+                    </Border.GestureRecognizers>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding EsSeisMeses}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Label Text="6 meses" FontFamily="RedondaMedia" FontSize="13" TextColor="{StaticResource Lila}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding EsSeisMeses}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource White}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Border>
+                <Border Style="{StaticResource OpcionRango}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CambiarRangoCommand}" CommandParameter="DoceMeses" />
+                    </Border.GestureRecognizers>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding EsDoceMeses}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Label Text="12 meses" FontFamily="RedondaMedia" FontSize="13" TextColor="{StaticResource Lila}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding EsDoceMeses}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource White}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Border>
+                <Border Style="{StaticResource OpcionRango}">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding CambiarRangoCommand}" CommandParameter="Todo" />
+                    </Border.GestureRecognizers>
+                    <Border.Triggers>
+                        <DataTrigger TargetType="Border" Binding="{Binding EsTodo}" Value="True">
+                            <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+                        </DataTrigger>
+                    </Border.Triggers>
+                    <Label Text="Todo" FontFamily="RedondaMedia" FontSize="13" TextColor="{StaticResource Lila}">
+                        <Label.Triggers>
+                            <DataTrigger TargetType="Label" Binding="{Binding EsTodo}" Value="True">
+                                <Setter Property="TextColor" Value="{StaticResource White}" />
+                            </DataTrigger>
+                        </Label.Triggers>
+                    </Label>
+                </Border>
+            </HorizontalStackLayout>
+
+            <!-- Sin datos -->
+            <Border Style="{StaticResource Tarjeta}" IsVisible="{Binding SinDatos}">
+                <VerticalStackLayout Spacing="8" HorizontalOptions="Center">
+                    <Label Text="🌱" FontSize="40" HorizontalOptions="Center" />
+                    <Label Text="Todavía no hay meses en este rango." Style="{StaticResource TextoFuerte}" HorizontalOptions="Center" />
+                    <Label Text="Registra tu sueldo y gastos en la pestaña Mes y vuelve aquí."
+                           Style="{StaticResource TextoSuave}" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Tarjeta principal: Ahorrado -->
+            <Border Style="{StaticResource Tarjeta}" Stroke="Transparent" Padding="22" IsVisible="{Binding HayDatos}">
+                <Border.Background>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                        <GradientStop Color="{StaticResource HeroInicio}" Offset="0" />
+                        <GradientStop Color="{StaticResource HeroFin}" Offset="1" />
+                    </LinearGradientBrush>
+                </Border.Background>
+
+                <VerticalStackLayout Spacing="14">
+                    <VerticalStackLayout Spacing="0">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="🐷 Ahorrado" Style="{StaticResource TextoFuerte}" />
+                            <Label Grid.Column="1" Text="{Binding CantidadMesesTexto}" Style="{StaticResource TextoSuave}" />
+                        </Grid>
+                        <Label Text="{Binding AhorradoTexto}" Style="{StaticResource MontoGrande}">
+                            <Label.Triggers>
+                                <DataTrigger TargetType="Label" Binding="{Binding AhorradoNegativo}" Value="True">
+                                    <Setter Property="TextColor" Value="{StaticResource Coral}" />
+                                </DataTrigger>
+                            </Label.Triggers>
+                        </Label>
+                    </VerticalStackLayout>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="💰 Ingresos" Style="{StaticResource TextoSuave}" />
+                            <Label Text="{Binding IngresosTexto}" Style="{StaticResource TextoFuerte}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label Text="💸 Gastos" Style="{StaticResource TextoSuave}" />
+                            <Label Text="{Binding GastosTexto}" Style="{StaticResource TextoFuerte}" />
+                        </VerticalStackLayout>
+                    </Grid>
+
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="0">
+                            <Label Text="📆 Gasto promedio" Style="{StaticResource TextoSuave}" />
+                            <Label Text="{Binding PromedioTexto}" Style="{StaticResource TextoFuerte}" />
+                        </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="0">
+                            <Label Text="🔥 Mes más caro" Style="{StaticResource TextoSuave}" />
+                            <Label Text="{Binding MesMasCaroTexto}" Style="{StaticResource TextoFuerte}" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Mes a mes -->
+            <Border Style="{StaticResource Tarjeta}" IsVisible="{Binding HayDatos}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="🗓️ Mes a mes" Style="{StaticResource TituloSeccion}" />
+                    <HorizontalStackLayout Spacing="14">
+                        <HorizontalStackLayout Spacing="6">
+                            <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="{StaticResource LilaClaro}" VerticalOptions="Center" />
+                            <Label Text="Ingresos" Style="{StaticResource TextoSuave}" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <HorizontalStackLayout Spacing="6">
+                            <BoxView WidthRequest="12" HeightRequest="12" CornerRadius="6" Color="{StaticResource RosaClaro}" VerticalOptions="Center" />
+                            <Label Text="Gastos" Style="{StaticResource TextoSuave}" FontSize="12" />
+                        </HorizontalStackLayout>
+                        <Label Text="· a la derecha, lo que quedó" Style="{StaticResource TextoSuave}" FontSize="12" />
+                    </HorizontalStackLayout>
+                    <!-- Su ancho se usa para dibujar todas las barras (ver ResumenPage.xaml.cs) -->
+                    <VerticalStackLayout x:Name="ContenedorGrafico"
+                                         BindableLayout.ItemsSource="{Binding Meses}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaMes}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- ¿En qué se fue? (acumulado) -->
+            <Border Style="{StaticResource Tarjeta}" IsVisible="{Binding HayDatos}">
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="🎨 ¿En qué se fue?" Style="{StaticResource TituloSeccion}" />
+                    <Label Text="Suma de todos los meses del rango." Style="{StaticResource TextoSuave}" />
+                    <Label Text="Sin gastos registrados en este rango." Style="{StaticResource TextoSuave}"
+                           IsVisible="{Binding SinCategorias}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Categorias}"
+                                         BindableLayout.ItemTemplate="{StaticResource PlantillaCategoria}" />
+                </VerticalStackLayout>
+            </Border>
+
+            <!-- Exportar -->
+            <VerticalStackLayout Spacing="6">
+                <Button Text="📤 Exportar historial completo (.md)" Style="{StaticResource BotonSuave}"
+                        Command="{Binding ExportarCommand}" />
+                <Label Text="Incluye todos los meses. Súbelo a Drive o pásaselo a una IA para analizar tus finanzas."
+                       Style="{StaticResource TextoSuave}" HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

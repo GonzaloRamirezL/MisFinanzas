@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MisFinanzas.App.Vistas.MovimientoPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MisFinanzas.App.ViewModels"
+    x:DataType="vm:MovimientoViewModel"
+    Title="{Binding Titulo}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,24,20,32" Spacing="18">
+
+            <!-- Encabezado -->
+            <HorizontalStackLayout Spacing="12">
+                <Border Style="{StaticResource Burbuja}" WidthRequest="52" HeightRequest="52"
+                        StrokeShape="RoundRectangle 26" BackgroundColor="{StaticResource LilaSuave}">
+                    <Label Text="{Binding Emoji}" FontSize="24"
+                           HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Text="{Binding Titulo}" Style="{StaticResource TituloPagina}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="14">
+
+                    <!-- Concepto / Detalle -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="{Binding EtiquetaConcepto}" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Entry Text="{Binding Concepto}" Placeholder="Ej: Luz, Zapatillas, Netflix…"
+                                   ReturnType="Next" MaxLength="80" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Monto -->
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Monto" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4">
+                                <Label Text="$" Style="{StaticResource TextoFuerte}" VerticalOptions="Center" />
+                                <Entry Grid.Column="1" Text="{Binding MontoTexto}" Placeholder="0"
+                                       Keyboard="Numeric" MaxLength="14" />
+                            </Grid>
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Categoría -->
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding MuestraCategoria}">
+                        <Label Text="Categoría" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Picker ItemsSource="{Binding Categorias}"
+                                    SelectedItem="{Binding CategoriaSeleccionada}"
+                                    Title="Elige una categoría" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Fecha -->
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding MuestraFecha}">
+                        <Label Text="Fecha" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <DatePicker Date="{Binding Fecha}" Format="dd/MM/yyyy"
+                                        MinimumDate="{Binding FechaMinima}" MaximumDate="{Binding FechaMaxima}" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- De quién -->
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding MuestraDeQuien}">
+                        <Label Text="¿Quién te pagó?" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Entry Text="{Binding DeQuien}" Placeholder="Opcional" MaxLength="60" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Nota -->
+                    <VerticalStackLayout Spacing="6" IsVisible="{Binding MuestraNota}">
+                        <Label Text="Nota" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Editor Text="{Binding Nota}" Placeholder="Opcional" AutoSize="TextChanges" MaxLength="200" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <!-- Estado -->
+                    <Grid ColumnDefinitions="*,Auto" IsVisible="{Binding MuestraEstado}">
+                        <VerticalStackLayout VerticalOptions="Center" Spacing="0">
+                            <Label Text="Ya está pagado" Style="{StaticResource TextoFuerte}" />
+                            <Label Text="Si no, queda en «Por pagar aún»." Style="{StaticResource TextoSuave}" />
+                        </VerticalStackLayout>
+                        <Switch Grid.Column="1" IsToggled="{Binding Pagado}"
+                                OnColor="{StaticResource MentaClaro}" ThumbColor="{StaticResource Superficie}" />
+                    </Grid>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar" Style="{StaticResource BotonPrincipal}" Command="{Binding GuardarCommand}" />
+            <Button Text="Cancelar" Style="{StaticResource BotonTexto}" Command="{Binding CancelarCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

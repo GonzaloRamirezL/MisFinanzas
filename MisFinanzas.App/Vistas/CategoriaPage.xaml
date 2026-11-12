@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    x:Class="MisFinanzas.App.Vistas.CategoriaPage"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:vm="clr-namespace:MisFinanzas.App.ViewModels"
+    x:DataType="vm:CategoriaFormViewModel"
+    Title="{Binding Titulo}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20,24,20,32" Spacing="18">
+
+            <HorizontalStackLayout Spacing="12">
+                <Border Style="{StaticResource Burbuja}" WidthRequest="52" HeightRequest="52"
+                        StrokeShape="RoundRectangle 26" BackgroundColor="{StaticResource LilaSuave}">
+                    <Label Text="{Binding Emoji}" FontSize="24" HorizontalOptions="Center" VerticalOptions="Center" />
+                </Border>
+                <Label Text="{Binding Titulo}" Style="{StaticResource TituloPagina}" VerticalOptions="Center" />
+            </HorizontalStackLayout>
+
+            <Border Style="{StaticResource Tarjeta}">
+                <VerticalStackLayout Spacing="14">
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Nombre" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Entry Text="{Binding Nombre}" Placeholder="Ej: Comida, Transporte, Anime" MaxLength="40" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Emoji" Style="{StaticResource EtiquetaCampo}" />
+                        <FlexLayout BindableLayout.ItemsSource="{Binding EmojisSugeridos}" Wrap="Wrap" JustifyContent="Start">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <Border Style="{StaticResource Burbuja}" Margin="0,0,8,8" BackgroundColor="{StaticResource Fondo}">
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="AlTocarEmoji" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="{Binding .}" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" />
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </FlexLayout>
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Entry Text="{Binding Emoji}" Placeholder="O escribe uno con el teclado de emojis" MaxLength="12" />
+                        </Border>
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Presupuesto mensual (opcional)" Style="{StaticResource EtiquetaCampo}" />
+                        <Border Style="{StaticResource CajaCampo}">
+                            <Grid ColumnDefinitions="Auto,*" ColumnSpacing="4">
+                                <Label Text="$" Style="{StaticResource TextoFuerte}" VerticalOptions="Center" />
+                                <Entry Grid.Column="1" Text="{Binding PresupuestoTexto}" Placeholder="Sin presupuesto"
+                                       Keyboard="Numeric" MaxLength="14" />
+                            </Grid>
+                        </Border>
+                        <Label Text="Con presupuesto verás una barra y alertas cuando te acerques al límite."
+                               Style="{StaticResource TextoSuave}" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar" Style="{StaticResource BotonPrincipal}" Command="{Binding GuardarCommand}" />
+            <Button Text="Cancelar" Style="{StaticResource BotonTexto}" Command="{Binding CancelarCommand}" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

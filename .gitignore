@@ -480,3 +480,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Llave de firma de Android: NUNCA subirla a GitHub
+*.keystore
+*.jks

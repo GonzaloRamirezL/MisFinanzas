@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml">
+
+    <!-- Estilos propios de Mis Finanzas. Se usan con Style="{StaticResource Nombre}". -->
+
+    <!-- Tarjetas -->
+    <Style x:Key="Tarjeta" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Superficie}" />
+        <Setter Property="Stroke" Value="{StaticResource Linea}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 24" />
+        <Setter Property="Padding" Value="18" />
+        <Setter Property="Shadow">
+            <Shadow Brush="{StaticResource LilaClaro}" Opacity="0.18" Radius="18" Offset="0,6" />
+        </Setter>
+    </Style>
+
+    <Style x:Key="TarjetaAlerta" TargetType="Border" BasedOn="{StaticResource Tarjeta}">
+        <Setter Property="BackgroundColor" Value="{StaticResource CoralSuave}" />
+        <Setter Property="Stroke" Value="{StaticResource CoralSuave}" />
+        <Setter Property="Shadow" Value="{x:Null}" />
+        <Setter Property="Padding" Value="16,14" />
+    </Style>
+
+    <!-- Círculo con emoji a la izquierda de cada fila -->
+    <Style x:Key="Burbuja" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource RosaSuave}" />
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 20" />
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- Etiquetas tipo "píldora" (Pagado / Pendiente / Por pagar) -->
+    <Style x:Key="Pildora" TargetType="Border">
+        <Setter Property="StrokeThickness" Value="0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 999" />
+        <Setter Property="Padding" Value="10,3" />
+        <Setter Property="HorizontalOptions" Value="End" />
+    </Style>
+
+    <!-- Textos -->
+    <Style x:Key="TituloPagina" TargetType="Label">
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="24" />
+        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+    </Style>
+
+    <Style x:Key="TituloSeccion" TargetType="Label">
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="17" />
+        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="TextoFuerte" TargetType="Label">
+        <Setter Property="FontFamily" Value="RedondaMedia" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+    </Style>
+
+    <Style x:Key="TextoSuave" TargetType="Label">
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource TextoSuave}" />
+    </Style>
+
+    <Style x:Key="Monto" TargetType="Label">
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+        <Setter Property="HorizontalTextAlignment" Value="End" />
+    </Style>
+
+    <Style x:Key="MontoGrande" TargetType="Label">
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="38" />
+        <Setter Property="TextColor" Value="{StaticResource Texto}" />
+    </Style>
+
+    <Style x:Key="EtiquetaCampo" TargetType="Label">
+        <Setter Property="FontFamily" Value="RedondaMedia" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="TextColor" Value="{StaticResource TextoSuave}" />
+        <Setter Property="Margin" Value="4,0,0,0" />
+    </Style>
+
+    <!-- Botones -->
+    <Style x:Key="BotonPrincipal" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource Lila}" />
+        <Setter Property="TextColor" Value="{StaticResource White}" />
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="16" />
+        <Setter Property="CornerRadius" Value="22" />
+        <Setter Property="HeightRequest" Value="52" />
+    </Style>
+
+    <Style x:Key="BotonSuave" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource LilaSuave}" />
+        <Setter Property="TextColor" Value="{StaticResource Lila}" />
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="15" />
+        <Setter Property="CornerRadius" Value="22" />
+        <Setter Property="HeightRequest" Value="48" />
+    </Style>
+
+    <Style x:Key="BotonTexto" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{StaticResource TextoSuave}" />
+        <Setter Property="FontFamily" Value="RedondaMedia" />
+        <Setter Property="FontSize" Value="15" />
+    </Style>
+
+    <!-- Botón redondo "+" de cada sección y flechas de mes -->
+    <Style x:Key="BotonCirculo" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{StaticResource LilaSuave}" />
+        <Setter Property="TextColor" Value="{StaticResource Lila}" />
+        <Setter Property="FontFamily" Value="RedondaNegrita" />
+        <Setter Property="FontSize" Value="20" />
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="MinimumWidthRequest" Value="40" />
+        <Setter Property="MinimumHeightRequest" Value="40" />
+        <Setter Property="CornerRadius" Value="20" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <!-- Campos de formulario -->
+    <Style x:Key="CajaCampo" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Fondo}" />
+        <Setter Property="Stroke" Value="{StaticResource Linea}" />
+        <Setter Property="StrokeThickness" Value="1" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 16" />
+        <Setter Property="Padding" Value="12,2" />
+    </Style>
+
+</ResourceDictionary>
