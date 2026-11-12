@@ -1,0 +1,9 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/MisFinanzas.Core/MisFinanzas.Core.csproj" />
+    <Project Path="src/MisFinanzas.Datos/MisFinanzas.Datos.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/MisFinanzas.Core.Tests/MisFinanzas.Core.Tests.csproj" />
+  </Folder>
+</Solution>
