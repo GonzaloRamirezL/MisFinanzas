@@ -84,20 +84,17 @@ public class MesViewModel : Observable
     public IReadOnlyList<string> Alertas { get; private set; } = [];
     public bool HayAlertas => Alertas.Count > 0;
 
-    public IReadOnlyList<MovimientoItem> CuentasFijas { get; private set; } = [];
-    public IReadOnlyList<MovimientoItem> Deudas { get; private set; } = [];
-    public IReadOnlyList<MovimientoItem> Compras { get; private set; } = [];
-    public IReadOnlyList<MovimientoItem> PagosRecibidos { get; private set; } = [];
+    // Cada lista muestra 5 registros (los más recientes primero) y un botón "Ver más".
+    public SeccionMovimientos CuentasFijas { get; } = new();
+    public SeccionMovimientos Deudas { get; } = new();
+    public SeccionMovimientos Compras { get; } = new();
+    public SeccionMovimientos PagosRecibidos { get; } = new();
 
     public string TotalCuentasFijasTexto => Formato.Pesos(_resumen?.CuentasFijas ?? 0);
     public string TotalDeudasTexto => Formato.Pesos(_resumen?.Deudas ?? 0);
     public string TotalComprasTexto => Formato.Pesos(_resumen?.Compras ?? 0);
     public string TotalPagosRecibidosTexto => Formato.Pesos(_resumen?.PagosRecibidos ?? 0);
 
-    public bool SinCuentasFijas => CuentasFijas.Count == 0;
-    public bool SinDeudas => Deudas.Count == 0;
-    public bool SinCompras => Compras.Count == 0;
-    public bool SinPagosRecibidos => PagosRecibidos.Count == 0;
 
     /// <summary>Solo categorías con gasto o con presupuesto (las vacías sin presupuesto no aportan).</summary>
     public IReadOnlyList<CategoriaItem> PorCategoria { get; private set; } = [];
@@ -123,17 +120,17 @@ public class MesViewModel : Observable
             var movimientos = await _servicio.ObtenerMovimientosAsync(_periodo);
             _resumen = await _servicio.ObtenerResumenMesAsync(_periodo);
 
+            // Orden descendente: lo último que agregaste aparece arriba (el Id crece con cada registro nuevo).
             List<MovimientoItem> DeTipo(TipoMovimiento tipo) => movimientos
                 .Where(m => m.Tipo == tipo)
-                .OrderBy(m => m.Tipo == TipoMovimiento.Compra || m.Tipo == TipoMovimiento.PagoRecibido ? m.Fecha : null)
-                .ThenBy(m => m.Id)
+                .OrderByDescending(m => m.Id)
                 .Select(m => new MovimientoItem(m, m.CategoriaId is int id && cats.TryGetValue(id, out var c) ? c : null, OpcionesAsync))
                 .ToList();
 
-            CuentasFijas = DeTipo(TipoMovimiento.CuentaFija);
-            Deudas = DeTipo(TipoMovimiento.Deuda);
-            Compras = DeTipo(TipoMovimiento.Compra);
-            PagosRecibidos = DeTipo(TipoMovimiento.PagoRecibido);
+            CuentasFijas.Actualizar(DeTipo(TipoMovimiento.CuentaFija));
+            Deudas.Actualizar(DeTipo(TipoMovimiento.Deuda));
+            Compras.Actualizar(DeTipo(TipoMovimiento.Compra));
+            PagosRecibidos.Actualizar(DeTipo(TipoMovimiento.PagoRecibido));
 
             PorCategoria = _resumen.PorCategoria
                 .Where(c => c.Gastado > 0 || c.Presupuesto is not null)
@@ -157,9 +154,7 @@ public class MesViewModel : Observable
         nameof(SueldoTexto), nameof(PorPagarTexto), nameof(HayPorPagar),
         nameof(PorcentajeGastado), nameof(PorcentajeGastadoTexto), nameof(SuperaUmbralGasto),
         nameof(Alertas), nameof(HayAlertas),
-        nameof(CuentasFijas), nameof(Deudas), nameof(Compras), nameof(PagosRecibidos),
         nameof(TotalCuentasFijasTexto), nameof(TotalDeudasTexto), nameof(TotalComprasTexto), nameof(TotalPagosRecibidosTexto),
-        nameof(SinCuentasFijas), nameof(SinDeudas), nameof(SinCompras), nameof(SinPagosRecibidos),
         nameof(PorCategoria), nameof(SinGastosPorCategoria));
 
     private async Task CambiarMesAsync(Periodo periodo)
@@ -171,6 +166,8 @@ public class MesViewModel : Observable
             return;
         }
         _periodo = periodo;
+        foreach (var seccion in new[] { CuentasFijas, Deudas, Compras, PagosRecibidos })
+            seccion.Colapsar();
         await CargarAsync();
     }
 

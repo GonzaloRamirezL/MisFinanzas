@@ -182,9 +182,11 @@
                         <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
                                 Command="{Binding AgregarCommand}" CommandParameter="Compra" />
                     </Grid>
-                    <Label Text="Sin compras este mes." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinCompras}" />
-                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Compras}"
+                    <Label Text="Sin compras este mes." Style="{StaticResource TextoSuave}" IsVisible="{Binding Compras.Vacia}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Compras.Visibles}"
                                          BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                    <Button Text="{Binding Compras.TextoBoton}" Style="{StaticResource BotonVerMas}"
+                            Command="{Binding Compras.AlternarCommand}" IsVisible="{Binding Compras.HayMas}" />
                 </VerticalStackLayout>
             </Border>
 
@@ -211,9 +213,11 @@
                         <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
                                 Command="{Binding AgregarCommand}" CommandParameter="CuentaFija" />
                     </Grid>
-                    <Label Text="Aún no hay cuentas fijas este mes." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinCuentasFijas}" />
-                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding CuentasFijas}"
+                    <Label Text="Aún no hay cuentas fijas este mes." Style="{StaticResource TextoSuave}" IsVisible="{Binding CuentasFijas.Vacia}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding CuentasFijas.Visibles}"
                                          BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                    <Button Text="{Binding CuentasFijas.TextoBoton}" Style="{StaticResource BotonVerMas}"
+                            Command="{Binding CuentasFijas.AlternarCommand}" IsVisible="{Binding CuentasFijas.HayMas}" />
                 </VerticalStackLayout>
             </Border>
 
@@ -226,9 +230,11 @@
                         <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
                                 Command="{Binding AgregarCommand}" CommandParameter="Deuda" />
                     </Grid>
-                    <Label Text="Nada por aquí." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinDeudas}" />
-                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Deudas}"
+                    <Label Text="Nada por aquí." Style="{StaticResource TextoSuave}" IsVisible="{Binding Deudas.Vacia}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Deudas.Visibles}"
                                          BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                    <Button Text="{Binding Deudas.TextoBoton}" Style="{StaticResource BotonVerMas}"
+                            Command="{Binding Deudas.AlternarCommand}" IsVisible="{Binding Deudas.HayMas}" />
                 </VerticalStackLayout>
             </Border>
 
@@ -241,9 +247,11 @@
                         <Button Grid.Column="2" Text="+" Style="{StaticResource BotonCirculo}"
                                 Command="{Binding AgregarCommand}" CommandParameter="PagoRecibido" />
                     </Grid>
-                    <Label Text="Aquí van los pagos que te hagan." Style="{StaticResource TextoSuave}" IsVisible="{Binding SinPagosRecibidos}" />
-                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding PagosRecibidos}"
+                    <Label Text="Aquí van los pagos que te hagan." Style="{StaticResource TextoSuave}" IsVisible="{Binding PagosRecibidos.Vacia}" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding PagosRecibidos.Visibles}"
                                          BindableLayout.ItemTemplate="{StaticResource PlantillaMovimiento}" />
+                    <Button Text="{Binding PagosRecibidos.TextoBoton}" Style="{StaticResource BotonVerMas}"
+                            Command="{Binding PagosRecibidos.AlternarCommand}" IsVisible="{Binding PagosRecibidos.HayMas}" />
                 </VerticalStackLayout>
             </Border>
 

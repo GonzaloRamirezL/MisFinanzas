@@ -113,6 +113,20 @@
         <Setter Property="FontSize" Value="15" />
     </Style>
 
+    <!-- "Ver más / Ver menos" al pie de las listas largas -->
+    <Style x:Key="BotonVerMas" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}" />
+        <Setter Property="TextColor" Value="{AppThemeBinding Light={StaticResource Lila}, Dark={StaticResource LilaOscuro}}" />
+        <Setter Property="FontFamily" Value="RedondaMedia" />
+        <Setter Property="FontSize" Value="13" />
+        <Setter Property="CornerRadius" Value="16" />
+        <Setter Property="HeightRequest" Value="34" />
+        <Setter Property="MinimumHeightRequest" Value="34" />
+        <Setter Property="Padding" Value="16,0" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Margin" Value="0,4,0,0" />
+    </Style>
+
     <!-- Botón redondo "+" de cada sección y flechas de mes -->
     <Style x:Key="BotonCirculo" TargetType="Button">
         <Setter Property="BackgroundColor" Value="{AppThemeBinding Light={StaticResource LilaSuave}, Dark={StaticResource LilaSuaveOscuro}}" />
